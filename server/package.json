@@ -1,0 +1,18 @@
+{
+  "name": "server",
+  "version": "1.0.0",
+  "description": "Tactix Mind Game",
+  "main": "index.js",
+  "scripts": {
+    "dev": "npx nodemon src/index.js",
+    "start": "node src/index.js"
+  },
+  "author": "Mustafa Dalga",
+  "license": "ISC",
+  "keywords": ["tactix","mind","game"],
+  "dependencies": {
+    "dotenv": "^16.0.1",
+    "express": "^4.18.1",
+    "nodeman": "^1.1.2"
+  }
+}
