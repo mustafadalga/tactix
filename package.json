@@ -1,0 +1,19 @@
+{
+  "name": "tactix",
+  "version": "1.0.0",
+  "description": "Tactix Mind Game",
+  "scripts": {
+    "start": "node server/src/index.js",
+    "build": "cd client && npm install && npm run build"
+  },
+  "keywords": [
+    "tactix",
+    "mind",
+    "game"
+  ],
+  "author": "Mustafa Dalga",
+  "license": "ISC",
+  "dependencies": {
+    "express": "^4.18.1"
+  }
+}
