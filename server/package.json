@@ -9,10 +9,15 @@
   },
   "author": "Mustafa Dalga",
   "license": "ISC",
-  "keywords": ["tactix","mind","game"],
+  "keywords": [
+    "tactix",
+    "mind",
+    "game"
+  ],
   "dependencies": {
     "dotenv": "^16.0.1",
     "express": "^4.18.1",
+    "mongoose": "^6.4.6",
     "nodeman": "^1.1.2"
   }
 }
