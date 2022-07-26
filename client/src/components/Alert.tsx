@@ -16,7 +16,7 @@ export default function Alert({type, message, className}: Props) {
     }
 
     return (
-        <div className={`p-2 text-sm rounded-lg ${classList[type]} ${className}`}>
+        <div className={`px-4 py-2 text-sm rounded-lg ${classList[type]} ${className}`}>
             {message}
         </div>
     )
