@@ -10,10 +10,6 @@ const MovementSchema = new mongoose.Schema({
         type: Number,
         required: true,
     },
-    playerID: {
-        type: Number,
-        required: true,
-    }
 })
 
 const Movement = mongoose.model('Movement', MovementSchema);
