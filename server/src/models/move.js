@@ -1,17 +1,17 @@
 const mongoose = require('mongoose');
 
-const MovementSchema = new mongoose.Schema({
+const MoveSchema = new mongoose.Schema({
     roomID: {
         type: String,
         required: true,
         trim: true
     },
-    movementID: {
+    moveID: {
         type: Number,
         required: true,
     },
 })
 
-const Movement = mongoose.model('Movement', MovementSchema);
+const Move = mongoose.model('Move', MoveSchema);
 
-module.exports = Movement
+module.exports = Move

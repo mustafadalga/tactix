@@ -11,6 +11,16 @@ const RoomSchema = new mongoose.Schema({
         trim: true,
         default: null,
     },
+    playerLeftScore: {
+        type: Number,
+        trim: true,
+        default: 0,
+    },
+    playerRightScore: {
+        type: Number,
+        trim: true,
+        default: 0,
+    },
     moveOrder: {
         type: String,
         trim: true,

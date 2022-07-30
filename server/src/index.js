@@ -3,13 +3,15 @@ const path = require('path');
 require('dotenv').config();
 require('./db/index');
 
-const router = require('./router')
+const roomRouter = require('./router/room')
+const moveRouter = require('./router/move')
 const app = express();
 const PORT = process.env.PORT || 3001;
 
 app.use(express.json())
 app.use(express.urlencoded({ extended: true }));
-app.use(router);
+app.use(roomRouter);
+app.use(moveRouter);
 app.use(express.static(path.resolve(__dirname, '../../client/build')));
 
 app.listen(PORT, () => {
