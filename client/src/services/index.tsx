@@ -1,2 +1,2 @@
 export * from "./room.service";
-export * from "./movement.service";
+export * from "./move.service";
