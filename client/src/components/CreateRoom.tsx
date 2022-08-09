@@ -19,16 +19,17 @@ export default function CreateRoom() {
     const roomID = room._id;
     const joinURL = `/join/${roomID}`;
     const fullJoinURL = `${window.location.origin}${joinURL}`;
-    let [ message, setMessage ] = useState("");
+    const [ message, setMessage ] = useState("");
 
     const createRoom = async () => {
         setMessage("");
 
-        try{
+
+        try {
             const response = await roomService.createRoom();
             dispatch(setRoomInformation(response.data))
 
-        }catch (error){
+        } catch (error) {
             if (axios.isAxiosError(error) && error.response) {
                 return setMessage((error.response?.data as ErrorResponse).message);
             }
