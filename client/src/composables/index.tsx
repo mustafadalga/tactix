@@ -1,4 +1,4 @@
-import { roomService } from "../../services";
+import { roomService } from "../services";
 import axios from "axios";
 
 interface ErrorResponse {

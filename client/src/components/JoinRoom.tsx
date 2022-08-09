@@ -3,12 +3,12 @@ import { RootState } from "../store";
 import { setRoomInformation, setUsername } from "../store/tactix";
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { roomService } from "../services";
-import axios from "axios";
 import Alert from "./Alert";
+import { fetchRoom } from "../composables";
 
-type ErrorResponse = {
-    message: string;
+interface Response {
+    message: string,
+    data: object
 };
 
 
@@ -18,7 +18,7 @@ export default function JoinRoom() {
     const room = useSelector((state: RootState) => state.tactix.room);
     const username = useSelector((state: RootState) => state.tactix.username);
     const roomID = room._id;
-    let [ message, setMessage ] = useState("");
+    const [ message, setMessage ] = useState("");
 
 
     const handleUsername = (event: React.FormEvent<HTMLInputElement>) => {
@@ -29,26 +29,23 @@ export default function JoinRoom() {
     const handleJoinButton = async () => {
         setMessage("");
 
-        if (!username.length){
+        if (!username.length) {
             return setMessage("Please enter a username.");
         }
-        if (!roomID){
-            return setMessage("Please enter a username.");
+        if (!roomID) {
+            return setMessage("Please enter a roomID.");
         }
 
-        try {
+        const response = await fetchRoom(roomID);
 
-            const response = await roomService.getRoom(roomID);
-            dispatch(setRoomInformation(response.data));
-            navigate(`/room/${roomID}`);
+        if ((response as Response).data) {
+            dispatch(setRoomInformation((response as Response).data));
 
-        } catch (error) {
+            return navigate(`/room/${roomID}`);
+        }
 
-            if (axios.isAxiosError(error) && error.response) {
-                return setMessage((error.response?.data as ErrorResponse).message);
-            }
-
-            setMessage("An error occurred during fetching room information. Please try again later.");
+        if ((response as Response).message) {
+            return setMessage((response as Response).message);
         }
     };
 
