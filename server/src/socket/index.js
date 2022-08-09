@@ -102,15 +102,12 @@ class Socket {
             }
 
 
-            console.log(6,room)
-
             this.io.to(roomID).emit('roomInformation', {
                 room: room,
                 status: true
             });
 
         } catch (error) {
-            console.log(error)
             return this.io.to(roomID).emit('roomInformation', {
                 status: false,
                 message: "An error occurred during fetching room information.Please refresh the page and try again."

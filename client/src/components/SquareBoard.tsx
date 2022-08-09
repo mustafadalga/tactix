@@ -1,19 +1,19 @@
 import Stone from "./Stone"
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 import StoneInterface from "../types/StoneInterface";
 import Tactix from "../classes/Tactix";
-import Socket from "../classes/Socket";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "../store";
+import { removeSelectedStones, setSelectedStone } from "../store/tactix";
 
 
 
 export default function Board() {
     const tactix = new Tactix();
-    const socket = new Socket();
-    const room = useSelector((state: RootState) => state.tactix.room);
+
     const moves = useSelector((state: RootState) => state.tactix.moves);
-    const [ selectedStones, setSelectedStone ] = useState<StoneInterface[]>(moves);
+    const selectedStones = useSelector((state: RootState) => state.tactix.selectedStones);
+    const dispatch = useDispatch();
 
 
     useEffect(() => {
@@ -23,7 +23,7 @@ export default function Board() {
     const appendSelectedStone = (stone: StoneInterface) => {
         if (tactix.isSelectedStoneExist(moves, selectedStones, stone)) return;
 
-        setSelectedStone(oldArray => [ ...oldArray, stone ]);
+        dispatch(setSelectedStone(stone));
     }
 
     const handleStone = () => {
@@ -32,23 +32,22 @@ export default function Board() {
         const firstStone = selectedStones[0];
         const lastStone = selectedStones[selectedStones.length - 1];
 
+
         if (tactix.isChainCross(firstStone, lastStone)) {
-            return setSelectedStone([]);
+            return dispatch(removeSelectedStones());
         }
 
         const direction = tactix.getChainDirection(firstStone, lastStone);
 
         if (!direction) {
-            return setSelectedStone([])
+            return dispatch(removeSelectedStones());
         }
-
 
         const stoneChain = tactix.hasStoneChain(selectedStones, direction);
-        if (!stoneChain) {
-            return setSelectedStone([])
-        }
 
-        socket.createMove(room._id,lastStone)
+        if (!stoneChain) {
+            return dispatch(removeSelectedStones());
+        }
     }
 
     return (
@@ -60,7 +59,7 @@ export default function Board() {
                 <Stone
                     key={stoneIndex}
                     stone={stone}
-                    selectedStone={tactix.isSelectedStoneExist(moves,selectedStones,stone)}
+                    selectedStone={tactix.isSelectedStoneExist(moves, selectedStones, stone)}
                     appendSelectedStone={appendSelectedStone}/>
             )}
         </div>

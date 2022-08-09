@@ -6,12 +6,14 @@ export interface TactixState {
         [key: string]: any;
     },
     username: string,
-    moves: StoneInterface[]
+    moves: StoneInterface[],
+    selectedStones: StoneInterface[],
 }
 
 const initialState: TactixState = {
     room: {},
     moves: [],
+    selectedStones: [],
     username: JSON.parse(localStorage.getItem('tactix') || '{}').username || ""
 }
 
@@ -32,14 +34,26 @@ export const tactixSlice = createSlice({
             state.moves = action.payload;
         },
         setMove: (state, action: PayloadAction<StoneInterface>) => {
-            console.log(action.payload)
             if (state.moves.some(move => move.row == action.payload.row && move.col == action.payload.col)) return;
 
             state.moves.push(action.payload);
         },
+        setSelectedStone: (state, action: PayloadAction<StoneInterface>) => {
+            state.selectedStones.push(action.payload);
+        },
+        removeSelectedStones: (state) => {
+            state.selectedStones = [];
+        },
     },
 })
 
-export const {setRoomInformation, setUsername, setMove, setMoves} = tactixSlice.actions
+export const {
+    setRoomInformation,
+    setUsername,
+    setMove,
+    setMoves,
+    setSelectedStone,
+    removeSelectedStones
+} = tactixSlice.actions
 
 export default tactixSlice.reducer
