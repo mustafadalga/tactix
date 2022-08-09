@@ -1,9 +1,10 @@
 import { io } from "socket.io-client"
-import { setMove, setMoves, setRoomInformation } from "../store/tactix";
+import { setRemovedStone, setRemovedStones, setRoomInformation } from "../store/tactix";
 import ISocket from "../types/ISocket";
 import IRoomInformationResponse from "../types/IRoomInformationResponse";
-import IMoveResponse from "../types/IMoveResponse";
-import IMovesResponse from "../types/IMovesResponse";
+import IRemovedStoneResponse from "../types/IRemovedStoneResponse";
+import IRemovedStonesResponse from "../types/IRemovedStonesResponse";
+import IStoneInterface from "../types/IStoneInterface";
 
 export default class Socket {
     private serverURL: string
@@ -33,10 +34,11 @@ export default class Socket {
 
     }
 
-    setMoves(dispatch: any, setMessage: any) {
-        this.socket.on('moves', (response: IMovesResponse) => {
+    setRemovedStones(dispatch: any, setMessage: any) {
+        this.socket.on('removedStones', (response: IRemovedStonesResponse) => {
+
             if (response.status) {
-                return dispatch(setMoves(response.moves));
+                return dispatch(setRemovedStones(response.removedStones));
             }
 
             setMessage(response.message);
@@ -44,19 +46,18 @@ export default class Socket {
     }
 
 
-    createMove(roomID: string, move: object) {
+    createMove(roomID: string, move: IStoneInterface[]) {
         this.socket.emit("createMove", {
             roomID: roomID,
             move: move
         });
     }
 
+    setRemovedStone(dispatch: any, setMessage: any) {
+        this.socket.on('lastMove', (response: IRemovedStoneResponse) => {
 
-    setMove(dispatch: any, setMessage: any) {
-        this.socket.on('move', (response: IMoveResponse) => {
             if (response.status) {
-                console.log(response.move)
-                return dispatch(setMove(response.move));
+                return response.lastMove.map(stone => dispatch(setRemovedStone(stone)))
             }
 
             setMessage(response.message);

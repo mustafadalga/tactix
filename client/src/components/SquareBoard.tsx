@@ -1,6 +1,6 @@
 import Stone from "./Stone"
 import { useEffect } from "react";
-import StoneInterface from "../types/StoneInterface";
+import IStoneInterface from "../types/IStoneInterface";
 import Tactix from "../classes/Tactix";
 import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "../store";
@@ -11,7 +11,7 @@ import { removeSelectedStones, setSelectedStone } from "../store/tactix";
 export default function Board() {
     const tactix = new Tactix();
 
-    const moves = useSelector((state: RootState) => state.tactix.moves);
+    const removedStones = useSelector((state: RootState) => state.tactix.removedStones);
     const selectedStones = useSelector((state: RootState) => state.tactix.selectedStones);
     const dispatch = useDispatch();
 
@@ -20,8 +20,8 @@ export default function Board() {
         handleStone();
     }, [ selectedStones ]);
 
-    const appendSelectedStone = (stone: StoneInterface) => {
-        if (tactix.isSelectedStoneExist(moves, selectedStones, stone)) return;
+    const appendSelectedStone = (stone: IStoneInterface) => {
+        if (tactix.isSelectedStoneExist(removedStones, selectedStones, stone)) return;
 
         dispatch(setSelectedStone(stone));
     }
@@ -59,7 +59,7 @@ export default function Board() {
                 <Stone
                     key={stoneIndex}
                     stone={stone}
-                    selectedStone={tactix.isSelectedStoneExist(moves, selectedStones, stone)}
+                    selectedStone={tactix.isSelectedStoneExist(removedStones, selectedStones, stone)}
                     appendSelectedStone={appendSelectedStone}/>
             )}
         </div>

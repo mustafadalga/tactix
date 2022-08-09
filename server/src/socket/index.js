@@ -39,28 +39,34 @@ class Socket {
         socket.on('createMove', async ({ roomID, move }) => {
 
             try {
-                const moveObject = new Move({
-                    roomID: roomID,
-                    move: move
-                });
-                await moveObject.save();
 
+                const createdStones = [];
 
-                if (!moveObject) {
-                    return this.io.to(roomID).emit('move', {
+                for (const moveStone of move) {
+
+                    const moveObject = new Move({
+                        roomID: roomID,
+                        move: moveStone
+                    });
+                    await moveObject.save();
+                    createdStones.push(moveObject.move);
+                }
+
+                if (!createdStones.length) {
+                    return this.io.to(roomID).emit('lastMove', {
                         status: false,
                         message: "The move could not be created. Please try again."
                     });
                 }
 
-                this.io.to(roomID).emit('move', {
-                    move: moveObject.move,
+                this.io.to(roomID).emit('lastMove', {
+                    lastMove: createdStones,
                     status: true
                 });
 
 
             } catch (error) {
-                return this.io.to(roomID).emit('move', {
+                return this.io.to(roomID).emit('lastMove', {
                     status: false,
                     message: "The move could not be created. Please try again."
                 });
@@ -121,19 +127,19 @@ class Socket {
             const moves = await Move.find({ roomID: roomID });
 
             if (!moves) {
-                return this.io.to(roomID).emit('moves', {
+                return this.io.to(roomID).emit('removedStones', {
                     status: false,
                     message: "The room's moves could no be found."
                 });
             }
 
-            this.io.to(roomID).emit('moves', {
-                moves: moves.map(move => move.move),
+            this.io.to(roomID).emit('removedStones', {
+                removedStones: moves.map(move => move.move),
                 status: true
             });
 
         } catch (error) {
-            return this.io.to(roomID).emit('moves', {
+            return this.io.to(roomID).emit('removedStones', {
                 status: false,
                 message: "An error occurred during fetching room's moves.Please refresh the page and try again."
             });

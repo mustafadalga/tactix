@@ -1,10 +1,10 @@
-import StoneInterface from "../types/StoneInterface";
+import IStoneInterface from "../types/IStoneInterface";
 import { Direction } from "../enums";
 
 export default class Tactix {
     private rowLength: number
     private columnLength: number
-    private stones: StoneInterface[]
+    private stones: IStoneInterface[]
     private stonesControlLimit: number
     private rowDiffLimit: number
     private columnDiffLimit: number
@@ -39,24 +39,24 @@ export default class Tactix {
         return this.stones;
     }
 
-    isSelectedStoneExist(moves:StoneInterface[],selectedStones: StoneInterface[], selectedStone: StoneInterface) {
+    isSelectedStoneExist(removedStones:IStoneInterface[], selectedStones: IStoneInterface[], selectedStone: IStoneInterface) {
 
-        if (moves.some(move => move.row == selectedStone.row && move.col == selectedStone.col)) {
+        if (removedStones.some(stone => stone.row == selectedStone.row && stone.col == selectedStone.col)) {
             return true;
         }
 
         return selectedStones.some(stone => stone.row == selectedStone.row && stone.col == selectedStone.col);
     }
 
-    isChainCheck(stones: StoneInterface[]) {
+    isChainCheck(stones: IStoneInterface[]) {
         return stones.length >= this.stonesControlLimit;
     }
 
-    isChainCross(firstStone: StoneInterface, lastStone: StoneInterface) {
+    isChainCross(firstStone: IStoneInterface, lastStone: IStoneInterface) {
         return !((firstStone.row == lastStone.row) || (firstStone.col == lastStone.col));
     }
 
-    getChainDirection(firstStone: StoneInterface, lastStone: StoneInterface) {
+    getChainDirection(firstStone: IStoneInterface, lastStone: IStoneInterface) {
         if (firstStone.row == lastStone.row) {
             return Direction.Horizontal;
 
@@ -65,7 +65,7 @@ export default class Tactix {
         }
     }
 
-    hasStoneChain(stones: StoneInterface[], direction: string) {
+    hasStoneChain(stones: IStoneInterface[], direction: string) {
         let status = true;
 
         for (let index = 0; index < stones.length - 1; index++) {

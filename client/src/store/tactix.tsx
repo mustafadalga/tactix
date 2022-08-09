@@ -1,18 +1,18 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit'
-import StoneInterface from "../types/StoneInterface";
+import IStoneInterface from "../types/IStoneInterface";
 
 export interface TactixState {
     room: {
         [key: string]: any;
     },
     username: string,
-    moves: StoneInterface[],
-    selectedStones: StoneInterface[],
+    removedStones: IStoneInterface[],
+    selectedStones: IStoneInterface[],
 }
 
 const initialState: TactixState = {
     room: {},
-    moves: [],
+    removedStones: [],
     selectedStones: [],
     username: JSON.parse(localStorage.getItem('tactix') || '{}').username || ""
 }
@@ -30,15 +30,15 @@ export const tactixSlice = createSlice({
                 username: action.payload
             }))
         },
-        setMoves: (state, action: PayloadAction<StoneInterface[]>) => {
-            state.moves = action.payload;
+        setRemovedStones: (state, action: PayloadAction<IStoneInterface[]>) => {
+            state.removedStones = action.payload;
         },
-        setMove: (state, action: PayloadAction<StoneInterface>) => {
-            if (state.moves.some(move => move.row == action.payload.row && move.col == action.payload.col)) return;
+        setRemovedStone: (state, action: PayloadAction<IStoneInterface>) => {
+            if (state.removedStones.some(removedStone => removedStone.row == action.payload.row && removedStone.col == action.payload.col)) return;
 
-            state.moves.push(action.payload);
+            state.removedStones.push(action.payload);
         },
-        setSelectedStone: (state, action: PayloadAction<StoneInterface>) => {
+        setSelectedStone: (state, action: PayloadAction<IStoneInterface>) => {
             state.selectedStones.push(action.payload);
         },
         removeSelectedStones: (state) => {
@@ -50,8 +50,8 @@ export const tactixSlice = createSlice({
 export const {
     setRoomInformation,
     setUsername,
-    setMove,
-    setMoves,
+    setRemovedStone,
+    setRemovedStones,
     setSelectedStone,
     removeSelectedStones
 } = tactixSlice.actions

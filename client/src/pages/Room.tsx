@@ -9,6 +9,7 @@ import { useDispatch, useSelector } from "react-redux";
 import Alert from "../components/Alert";
 import { RootState } from "../store";
 import Socket from "../classes/Socket";
+import SquardBoardButtonGroup from "../components/SquardBoardButtonGroup";
 
 export default function Room() {
     const socket = new Socket();
@@ -27,8 +28,8 @@ export default function Room() {
         socket.joinRoom(roomID, username);
         socket.setRoomInformation(navigate, dispatch);
         socket.setMessage(setMessage);
-        socket.setMoves(dispatch,setMessage);
-        socket.setMove(dispatch,setMessage);
+        socket.setRemovedStones(dispatch,setMessage);
+        socket.setRemovedStone(dispatch,setMessage);
     }
 
     useEffect(() => {
@@ -52,19 +53,9 @@ export default function Room() {
 
                 <div className="col-span-10 flex justify-center flex-col items-center gap-4 md:gap-6 2xl:gap-8">
                     <SquareBoard/>
-                    <div className="flex justify-center items-center gap-6 flex-col sm:flex-row">
-                        <button
-                            className="flex items-center gap-4 bg-white text-black py-2.5 px-6 rounded-md shadow-md whitespace-nowrap">
-                            <IconHand className="h-6"/>
-                            <span>Get Stones</span>
-                        </button>
-                        <button
-                            className="flex items-center gap-4 bg-white text-black py-2.5 px-6 rounded-md shadow-md whitespace-nowrap">
-                            <IconRefresh className="h-6"/>
-                            <span>New Game</span>
-                        </button>
-                    </div>
+                    <SquardBoardButtonGroup setMessage={setMessage}/>
                 </div>
+
                 <div className="col-span-1 grid">
                     <Gamer gamer={room.playerRight}
                            className="rounded-tl-3xl rounded-bl-3xl ml-auto bg-cyber-yellow text-black shadow-[0_0px_15px_0px_rgba(0,0,0,0.3)] shadow-white"/>
