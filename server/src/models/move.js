@@ -6,9 +6,15 @@ const MoveSchema = new mongoose.Schema({
         required: true,
         trim: true
     },
-    moveID: {
-        type: Number,
-        required: true,
+    move: {
+        row: {
+            type: Number,
+            required: true,
+        },
+        col: {
+            type: Number,
+            required: true,
+        },
     },
 })
 

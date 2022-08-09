@@ -13,7 +13,7 @@ router.post('/move/create', async (request, response) => {
         response.status(200).send(move);
     } catch (error) {
         response.status(400).send({
-            message: 'The room could not be created. Please try again later.'
+            message: 'The move could not be created. Please try again later.'
         })
     }
 });
