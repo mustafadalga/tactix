@@ -2,34 +2,42 @@ const mongoose = require('mongoose');
 
 const RoomSchema = new mongoose.Schema({
     playerLeft: {
-        type: String,
-        trim: true,
-        default: null,
+        socketID: {
+            type: String,
+            trim: true,
+        },
+        username: {
+            type: String,
+            trim: true,
+        },
+        score: {
+            type: Number,
+            trim: true,
+            default: 0,
+        }
     },
     playerRight: {
-        type: String,
-        trim: true,
-        default: null,
-    },
-    playerLeftScore: {
-        type: Number,
-        trim: true,
-        default: 0,
-    },
-    playerRightScore: {
-        type: Number,
-        trim: true,
-        default: 0,
+        socketID: {
+            type: String,
+            trim: true,
+        },
+        username: {
+            type: String,
+            trim: true,
+        },
+        score: {
+            type: Number,
+            trim: true,
+            default: 0,
+        }
     },
     moveOrder: {
         type: String,
         trim: true,
-        default: null,
     },
     winnerPlayer: {
         type: String,
         trim: true,
-        default: null,
     },
     isGameStarted: {
         type: Boolean,
@@ -38,7 +46,7 @@ const RoomSchema = new mongoose.Schema({
     isGameFinished: {
         type: Boolean,
         default: false,
-    }
+    },
 });
 
 

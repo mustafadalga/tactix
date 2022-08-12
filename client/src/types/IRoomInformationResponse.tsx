@@ -1,5 +1,7 @@
 export default interface IRoomInformationResponse {
     status: boolean,
     message: string,
-    room: object
+    room: object,
+    statusCode?: string,
+    roomID?: string
 }

@@ -1,6 +1,7 @@
 const { Server } = require("socket.io");
 const Room = require("../models/room");
 const Move = require("../models/move");
+const { generateRandomInteger } = require("../utils");
 
 
 class Socket {
@@ -25,13 +26,12 @@ class Socket {
     }
 
     joinRoom (socket) {
-        socket.on('joinRoom', async ({ roomID, username }) => {
+        socket.on('joinRoom', ({ roomID, username }) => {
             socket.join(roomID);
             socket.emit('message', 'Welcome!');
             socket.broadcast.to(roomID).emit('message', `${username} has joined!`);
-            this.emitRoomInformation(roomID,username);
+            this.handleAndEmitRoomInformation(socket.id, roomID, username);
             this.emitMoves(roomID);
-
         });
     }
 
@@ -40,19 +40,17 @@ class Socket {
 
             try {
 
-                const createdStones = [];
-
-                for (const moveStone of move) {
-
+                const promises = move.map(moveStone => {
                     const moveObject = new Move({
                         roomID: roomID,
                         move: moveStone
                     });
-                    await moveObject.save();
-                    createdStones.push(moveObject.move);
-                }
+                    return moveObject.save();
+                });
 
-                if (!createdStones.length) {
+                const response = await Promise.all(promises);
+
+                if (!response.length) {
                     return this.io.to(roomID).emit('lastMove', {
                         status: false,
                         message: "The move could not be created. Please try again."
@@ -60,7 +58,7 @@ class Socket {
                 }
 
                 this.io.to(roomID).emit('lastMove', {
-                    lastMove: createdStones,
+                    lastMove: response.map(item => item.move),
                     status: true
                 });
 
@@ -76,12 +74,33 @@ class Socket {
     }
 
     disConnect (socket) {
-        socket.on('disconnect', () => {
-            console.log(" disconnect");
+        socket.on('disconnect', async () => {
+
+            const room = await Room.findOne({
+                $or: [
+                    { 'playerLeft.socketID': socket.id },
+                    { 'playerRight.socketID': socket.id }
+                ]
+            });
+
+            if (!room) return;
+
+            let player;
+
+            if (room.playerLeft.socketID == socket.id) {
+                player = room.playerLeft.username;
+                room.playerLeft.socketID = undefined;
+            } else if (room.playerRight.socketID == socket.id) {
+                player = room.playerRight.username;
+                room.playerRight.socketID = undefined;
+            }
+
+            await room.save();
+            socket.broadcast.to(room._id).emit('message', `${player} has left!`);
         })
     }
 
-    async emitRoomInformation (roomID,username) {
+    async handleAndEmitRoomInformation (socketID, roomID, username) {
         try {
             const room = await Room.findById(roomID);
 
@@ -92,21 +111,34 @@ class Socket {
                 });
             }
 
-            let player;
-
-            if (!room.playerLeft && room.playerRight != username) {
-                player = "playerLeft";
-                room.playerLeft = username;
-                room.save();
-            } else if (!room.playerRight && room.playerLeft != username) {
-                player = "playerRight";
+            // Update Username
+            if (!room.playerLeft.username) {
+                room.playerLeft.username = username;
+            } else if (!room.playerRight.username && room.playerLeft.username != username) {
+                room.playerRight.username = username;
+            } else if (!room.playerRight.username && room.playerLeft.username == username) {
+                return this.io.to(roomID).emit('roomInformation', {
+                    status: false,
+                    statusCode: "duplicateUsername",
+                    roomID: roomID,
+                    message: "Please use a different username!"
+                });
             }
 
-            if (player) {
-                room[player] = username;
-                room.save();
+            // Update socketID
+            if (room.playerLeft.username == username) {
+                room.playerLeft.socketID = socketID;
+            } else if (room.playerRight.username == username) {
+                room.playerRight.socketID = socketID;
             }
 
+            // Define Move Order and Start Game
+            if (!room.isGameStarted && room.playerLeft.username && room.playerRight.username) {
+                room.isGameStarted = true;
+                room.moveOrder = room[this.getRandomUser()].username;
+            }
+
+            await room.save();
 
             this.io.to(roomID).emit('roomInformation', {
                 room: room,
@@ -117,12 +149,12 @@ class Socket {
             return this.io.to(roomID).emit('roomInformation', {
                 status: false,
                 message: "An error occurred during fetching room information.Please refresh the page and try again."
-
             });
         }
 
     }
-    async emitMoves(roomID){
+
+    async emitMoves (roomID) {
         try {
             const moves = await Move.find({ roomID: roomID });
 
@@ -145,6 +177,15 @@ class Socket {
             });
         }
 
+    }
+
+    getRandomUser () {
+        const number = generateRandomInteger(1, 2);
+        if (number == 1) {
+            return 'playerLeft';
+        } else if (number == 2) {
+            return 'playerRight';
+        }
     }
 }
 

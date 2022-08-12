@@ -1,19 +1,20 @@
 import IconHand from "../icons/IconHand";
 import IconRefresh from "../icons/IconRefresh";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "../store";
 import Socket from "../classes/Socket";
+import { removeSelectedStones } from "../store/tactix";
 
 interface Props {
     setMessage: (params: any) => any;
 }
 
+
 export default function SquardBoardButtonGroup({setMessage}: Props) {
     const selectedStones = useSelector((state: RootState) => state.tactix.selectedStones);
     const room = useSelector((state: RootState) => state.tactix.room);
     const roomID = room._id;
-    const socket = new Socket();
-
+    const dispatch = useDispatch();
 
     const handleGetStones = () => {
         setMessage("");
@@ -22,7 +23,8 @@ export default function SquardBoardButtonGroup({setMessage}: Props) {
             return setMessage("Please select at least one stone!");
         }
 
-        socket.createMove(roomID, selectedStones);
+        Socket.createMove(roomID, selectedStones);
+        dispatch(removeSelectedStones());
     }
 
     return (

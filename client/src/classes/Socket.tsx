@@ -6,7 +6,7 @@ import IRemovedStoneResponse from "../types/IRemovedStoneResponse";
 import IRemovedStonesResponse from "../types/IRemovedStonesResponse";
 import IStoneInterface from "../types/IStoneInterface";
 
-export default class Socket {
+class Socket {
     private serverURL: string
     private socket: ISocket
 
@@ -27,6 +27,10 @@ export default class Socket {
         this.socket.on('roomInformation', (response: IRoomInformationResponse) => {
             if (response.status) {
                 return dispatch(setRoomInformation(response.room));
+            }
+
+            if (response.statusCode == "duplicateUsername") {
+                return navigate(`/join/${response.roomID}/?message=${response.message}`)
             }
 
             return navigate(`/?message=${response.message}`)
@@ -71,3 +75,6 @@ export default class Socket {
     }
 
 }
+
+const socketInstance = new Socket();
+export default socketInstance;
