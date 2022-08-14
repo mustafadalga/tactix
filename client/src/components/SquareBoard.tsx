@@ -24,6 +24,14 @@ export default function Board({ setMessage }: Props) {
     }, [ selectedStones ]);
 
     const appendSelectedStone = (stone: IStoneInterface) => {
+        if (!room.isGameStarted) {
+            return setMessage("The game has not started yet!");
+        }
+
+        if (room.isGameFinished) {
+            return setMessage("Game over!");
+        }
+
         if (room.moveOrder != username) {
             return setMessage("Move order is on the opposite side!");
         }
