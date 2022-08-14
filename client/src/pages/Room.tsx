@@ -8,6 +8,7 @@ import Alert from "../components/Alert";
 import { RootState } from "../store";
 import Socket from "../classes/Socket";
 import SquardBoardButtonGroup from "../components/SquardBoardButtonGroup";
+import { removeLocalStorageKey } from "../store/tactix";
 
 export default function Room() {
 
@@ -32,8 +33,8 @@ export default function Room() {
         Socket.joinRoom(roomID, username);
         Socket.setRoomInformation(navigate, dispatch);
         Socket.setMessage(setMessage);
-        Socket.setRemovedStones(dispatch,setMessage);
-        Socket.setRemovedStone(dispatch,setMessage);
+        Socket.setRemovedStones(dispatch, setMessage);
+        Socket.setRemovedStone(dispatch, setMessage);
 
     }
 
@@ -50,6 +51,8 @@ export default function Room() {
         return () => clearInterval(interval);
     }, [ message ]);
 
+
+    // Add box-shadow effect to Player component for active player(moveOrder)
     useEffect(() => {
         if (room.moveOrder) {
             if (room.moveOrder == room.playerLeft.username) {
@@ -61,19 +64,27 @@ export default function Room() {
 
             if (room.moveOrder == room.playerRight.username) {
                 return updatePlayerClasses({
-                    playerLeft:"",
+                    playerLeft: "",
                     playerRight: "shadow-[0_0px_20px_0px_rgba(0,0,0,0.3)] shadow-white"
                 });
             }
         }
-    }, [ room ]);
+
+    }, [ room.moveOrder ]);
+
+    // Delete moveOrder localStorage value when game starts
+    useEffect(() => {
+        if (room.isGameStarted) {
+            dispatch(removeLocalStorageKey('gameOwner'));
+        }
+    }, [ room.isGameStarted ])
 
 
     return (
         <div className="relative w-full h-full grid grid-rows-[15%_85%] bg-indigo-900">
 
             <section className="w-full flex items-center justify-center p-4">
-                { room.playerLeft && room.playerRight &&
+                {room.playerLeft && room.playerRight &&
                     <Score playerLeft={room.playerLeft.score} playerRight={room.playerRight.score}/>
                 }
             </section>
@@ -81,7 +92,7 @@ export default function Room() {
             <section className="grid grid-cols-12">
 
                 <div className="col-span-1 grid">
-                    { room.playerLeft &&
+                    {room.playerLeft &&
                         <Gamer gamer={room.playerLeft.username}
                                className={`rounded-tr-3xl rounded-br-3xl bg-light-blue text-white ${playerClasses.playerLeft}`}/>
                     }
@@ -93,7 +104,7 @@ export default function Room() {
                 </div>
 
                 <div className="col-span-1 grid">
-                    { room.playerRight &&
+                    {room.playerRight &&
                         <Gamer gamer={room.playerRight.username}
                                className={`rounded-tl-3xl rounded-bl-3xl ml-auto bg-cyber-yellow text-black ${playerClasses.playerRight}`}/>
                     }
