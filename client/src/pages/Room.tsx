@@ -80,13 +80,23 @@ export default function Room() {
     }, [ room.isGameStarted ]);
 
 
-    // Delete player box-shadow effect when game over.
+    // Delete player box-shadow effect when game over and add animate for winner.
     useEffect(() => {
         if (room.isGameFinished) {
-            updatePlayerClasses({
-                playerLeft: "",
-                playerRight: "",
-            });
+
+            if (room.moveOrder == room.playerLeft.username) {
+                return updatePlayerClasses({
+                    playerLeft: "animate-player-left",
+                    playerRight: "",
+                });
+            }
+
+            if (room.moveOrder == room.playerRight.username) {
+                return updatePlayerClasses({
+                    playerLeft: "",
+                    playerRight: "animate-player-right"
+                });
+            }
         }
     }, [ room.isGameFinished ])
 
