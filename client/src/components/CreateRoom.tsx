@@ -1,12 +1,12 @@
 import { Link } from "react-router-dom";
 import { roomService } from "../services";
 import { useDispatch, useSelector } from "react-redux";
-import { setRoomInformation } from "../store/tactix";
+import { setGameOwnerStatus, setRoomInformation, setUsername } from "../store/tactix";
 import { RootState } from "../store";
 import ClipBoard from "../icons/ClipBoard";
 import { copy } from "../utils";
 import axios from "axios";
-import { useState } from "react";
+import React, { useEffect, useState } from "react";
 import Alert from "./Alert";
 
 type ErrorResponse = {
@@ -16,18 +16,32 @@ type ErrorResponse = {
 export default function CreateRoom() {
     const dispatch = useDispatch();
     const room = useSelector((state: RootState) => state.tactix.room);
+    const username = useSelector((state: RootState) => state.tactix.localStorage.username);
     const roomID = room._id;
     const joinURL = `/join/${roomID}`;
     const fullJoinURL = `${window.location.origin}${joinURL}`;
     const [ message, setMessage ] = useState("");
 
+
+    useEffect(() => {
+        dispatch(setRoomInformation({}));
+    }, []);
+
+    const handleUsername = (event: React.FormEvent<HTMLInputElement>) => {
+        const value = (event.target as HTMLInputElement).value;
+        dispatch(setUsername(value))
+    }
+
     const createRoom = async () => {
         setMessage("");
 
-
+        if (!username || !username.length) {
+            return setMessage('Game owner could not found. Please enter a game owner username!');
+        }
         try {
-            const response = await roomService.createRoom();
-            dispatch(setRoomInformation(response.data))
+            const response = await roomService.createRoom(username);
+            dispatch(setRoomInformation(response.data));
+            dispatch(setGameOwnerStatus(true))
 
         } catch (error) {
             if (axios.isAxiosError(error) && error.response) {
@@ -44,10 +58,19 @@ export default function CreateRoom() {
                 Create your room and join the room
             </h2>
 
+
+            <div className="grid grid-cols-4 gap-3">
+                <span className="col-span-1 text-sm text-gray-600">Game Owner</span>
+                <input type="text"
+                       className="col-span-3 border-b-2 border-gray-300 focus:border-purple-500  border-solid focus:outline-none bg-transparent"
+                       value={username}
+                       onChange={event => handleUsername(event)}/>
+            </div>
+
             <div className="grid place-items-center">
                 <button className="bg-purple-700 text-white py-2.5 px-4 rounded-md shadow-md"
                         onClick={() => createRoom()}>
-                    Create Room
+                    Create Game
                 </button>
             </div>
 
@@ -81,6 +104,11 @@ export default function CreateRoom() {
                     </div>
                 </>
             }
+
+            <div className="w-full bg-white grid place-items-center gap-3">
+                <span className="text-base">OR</span>
+                <Link to="/join" className="text-gray-400 underline text-sm"> Join a Game </Link>
+            </div>
 
             {message.length > 0 &&
                 <div className="mb-4 mx-8">
