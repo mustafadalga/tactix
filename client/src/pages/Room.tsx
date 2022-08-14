@@ -77,7 +77,18 @@ export default function Room() {
         if (room.isGameStarted) {
             dispatch(removeLocalStorageKey('gameOwner'));
         }
-    }, [ room.isGameStarted ])
+    }, [ room.isGameStarted ]);
+
+
+    // Delete player box-shadow effect when game over.
+    useEffect(() => {
+        if (room.isGameFinished) {
+            updatePlayerClasses({
+                playerLeft: "",
+                playerRight: "",
+            });
+        }
+    }, [ room.isGameFinished ])
 
 
     return (
