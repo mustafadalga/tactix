@@ -12,6 +12,7 @@ class Socket {
                 credentials: true
             }
         });
+        this.numberOfStones = 16;
         this.connection();
     }
 
@@ -31,7 +32,6 @@ class Socket {
             socket.emit('message', 'Welcome!');
             socket.broadcast.to(roomID).emit('message', `${username} has joined!`);
             const roomStatus = await this.handleRoomInformation(socket.id, roomID, username);
-
             if (roomStatus) {
                 this.emitRoomInformation(roomID);
                 this.emitMoves(roomID);
@@ -68,8 +68,12 @@ class Socket {
                     status: true
                 });
 
+
                 await that.changeMoveOrder(roomID);
+                await that.checkAndHandleGameStatus(socket,roomID);
                 that.emitRoomInformation(roomID);
+
+
 
             } catch (error) {
                 return this.io.to(roomID).emit('lastMove', {
@@ -221,6 +225,29 @@ class Socket {
         }
 
         room.save();
+    }
+
+    async checkAndHandleGameStatus(socket,roomID){
+        try {
+            const moves = await Move.find({ roomID: roomID });
+            const room = await Room.findById(roomID);
+            if (moves.length == this.numberOfStones) {
+
+                room.isGameFinished = true;
+                room.winnerPlayer = room.moveOrder;
+
+                if (room.winnerPlayer == room.playerLeft.username) {
+                    room.playerLeft.score += 1;
+                }else if (room.winnerPlayer == room.playerRight.username){
+                    room.playerRight.score += 1;
+                }
+
+                await room.save();
+            }
+
+        } catch (error) {
+            socket.emit('message', 'An error occurred during checking game status!');
+        }
     }
 
     getRandomUser () {
