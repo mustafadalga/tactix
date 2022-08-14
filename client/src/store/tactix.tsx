@@ -1,21 +1,16 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit'
 import IStoneInterface from "../types/IStoneInterface";
+import TactixState from "../types/ITactixState";
 
-export interface TactixState {
-    room: {
-        [key: string]: any;
-    },
-    username: string,
-    removedStones: IStoneInterface[],
-    selectedStones: IStoneInterface[],
-}
 
+const localStorageName = "tactix";
 const initialState: TactixState = {
     room: {},
     removedStones: [],
     selectedStones: [],
-    username: JSON.parse(localStorage.getItem('tactix') || '{}').username || ""
+    localStorage: JSON.parse(localStorage.getItem(localStorageName) || '{}')
 }
+
 
 export const tactixSlice = createSlice({
     name: 'tactix',
@@ -25,10 +20,17 @@ export const tactixSlice = createSlice({
             state.room = action.payload;
         },
         setUsername: (state, action: PayloadAction<string>) => {
-            state.username = action.payload;
-            localStorage.setItem('tactix', JSON.stringify({
-                username: action.payload
-            }))
+            state.localStorage.username = action.payload;
+            localStorage.setItem(localStorageName, JSON.stringify(state.localStorage));
+        },
+        setGameOwnerStatus: (state, action: PayloadAction<boolean>) => {
+            state.localStorage.gameOwner = action.payload;
+            localStorage.setItem(localStorageName, JSON.stringify(state.localStorage));
+        },
+        removeLocalStorageKey(state, action: PayloadAction<string>) {
+            const {[action.payload]: _, ...variables} = state.localStorage;
+            state.localStorage = variables;
+            localStorage.setItem(localStorageName, JSON.stringify(state.localStorage));
         },
         setRemovedStones: (state, action: PayloadAction<IStoneInterface[]>) => {
             state.removedStones = action.payload;
@@ -47,13 +49,16 @@ export const tactixSlice = createSlice({
     },
 })
 
+
 export const {
     setRoomInformation,
     setUsername,
+    setGameOwnerStatus,
     setRemovedStone,
     setRemovedStones,
     setSelectedStone,
-    removeSelectedStones
+    removeSelectedStones,
+    removeLocalStorageKey,
 } = tactixSlice.actions
 
 export default tactixSlice.reducer
