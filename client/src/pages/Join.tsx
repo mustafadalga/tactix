@@ -14,9 +14,11 @@ export default function Join() {
     const queryMessage: string = searchParams.get("message") || "";
 
     useEffect(() => {
-        dispatch(setRoomInformation({
-            _id: roomID
-        }));
+        if (roomID){
+            dispatch(setRoomInformation({
+                _id: roomID
+            }));
+        }
 
         if (queryMessage) {
             searchParams.delete("message");
