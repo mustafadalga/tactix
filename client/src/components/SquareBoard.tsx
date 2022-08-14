@@ -6,11 +6,14 @@ import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "../store";
 import { removeSelectedStones, setSelectedStone } from "../store/tactix";
 
+interface Props {
+    setMessage: (params: any) => any;
+}
 
-
-export default function Board() {
+export default function Board({ setMessage }: Props) {
     const tactix = new Tactix();
-
+    const room = useSelector((state: RootState) => state.tactix.room);
+    const username = useSelector((state: RootState) => state.tactix.localStorage.username);
     const removedStones = useSelector((state: RootState) => state.tactix.removedStones);
     const selectedStones = useSelector((state: RootState) => state.tactix.selectedStones);
     const dispatch = useDispatch();
@@ -21,6 +24,10 @@ export default function Board() {
     }, [ selectedStones ]);
 
     const appendSelectedStone = (stone: IStoneInterface) => {
+        if (room.moveOrder != username) {
+            return setMessage("Move order is on the opposite side!");
+        }
+
         if (tactix.isSelectedStoneExist(removedStones, selectedStones, stone)) return;
 
         dispatch(setSelectedStone(stone));
