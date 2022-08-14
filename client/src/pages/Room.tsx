@@ -15,9 +15,12 @@ export default function Room() {
     const navigate = useNavigate();
     const {roomID} = useParams<{}>() as { roomID: string };
     const [ message, setMessage ] = useState("");
+    const [ playerClasses, updatePlayerClasses ] = useState({
+        playerLeft: "",
+        playerRight: ""
+    });
     const username = useSelector((state: RootState) => state.tactix.username);
     const room = useSelector((state: RootState) => state.tactix.room);
-
     const handleRoom = async () => {
 
         if (!username) {
@@ -29,11 +32,31 @@ export default function Room() {
         Socket.setMessage(setMessage);
         Socket.setRemovedStones(dispatch,setMessage);
         Socket.setRemovedStone(dispatch,setMessage);
+
+
     }
 
     useEffect(() => {
         handleRoom();
     }, []);
+
+    useEffect(() => {
+        if (room.moveOrder) {
+            if (room.moveOrder == room.playerLeft.username) {
+                return updatePlayerClasses({
+                    ...playerClasses,
+                    playerLeft: "shadow-[0_0px_20px_0px_rgba(0,0,0,0.3)] shadow-white"
+                });
+            }
+
+            if (room.moveOrder == room.playerRight.username) {
+                return updatePlayerClasses({
+                    ...playerClasses,
+                    playerRight: "shadow-[0_0px_20px_0px_rgba(0,0,0,0.3)] shadow-white"
+                });
+            }
+        }
+    }, [ room ]);
 
 
     return (
@@ -49,7 +72,8 @@ export default function Room() {
 
                 <div className="col-span-1 grid">
                     { room.playerLeft &&
-                        <Gamer gamer={room.playerLeft.username} className="rounded-tr-3xl rounded-br-3xl bg-light-blue text-white"/>
+                        <Gamer gamer={room.playerLeft.username}
+                               className={`rounded-tr-3xl rounded-br-3xl bg-light-blue text-white ${playerClasses.playerLeft}`}/>
                     }
                 </div>
 
@@ -61,7 +85,7 @@ export default function Room() {
                 <div className="col-span-1 grid">
                     { room.playerRight &&
                         <Gamer gamer={room.playerRight.username}
-                               className="rounded-tl-3xl rounded-bl-3xl ml-auto bg-cyber-yellow text-black shadow-[0_0px_15px_0px_rgba(0,0,0,0.3)] shadow-white"/>
+                               className={`rounded-tl-3xl rounded-bl-3xl ml-auto bg-cyber-yellow text-black ${playerClasses.playerRight}`}/>
                     }
                 </div>
 
