@@ -19,7 +19,7 @@ export default function Room() {
         playerLeft: "",
         playerRight: ""
     });
-    const username = useSelector((state: RootState) => state.tactix.username);
+    const username = useSelector((state: RootState) => state.tactix.localStorage.username);
     const room = useSelector((state: RootState) => state.tactix.room);
     const handleRoom = async () => {
 
@@ -33,7 +33,6 @@ export default function Room() {
         Socket.setRemovedStones(dispatch,setMessage);
         Socket.setRemovedStone(dispatch,setMessage);
 
-
     }
 
     useEffect(() => {
@@ -44,14 +43,14 @@ export default function Room() {
         if (room.moveOrder) {
             if (room.moveOrder == room.playerLeft.username) {
                 return updatePlayerClasses({
-                    ...playerClasses,
-                    playerLeft: "shadow-[0_0px_20px_0px_rgba(0,0,0,0.3)] shadow-white"
+                    playerLeft: "shadow-[0_0px_20px_0px_rgba(0,0,0,0.3)] shadow-white",
+                    playerRight: "",
                 });
             }
 
             if (room.moveOrder == room.playerRight.username) {
                 return updatePlayerClasses({
-                    ...playerClasses,
+                    playerLeft:"",
                     playerRight: "shadow-[0_0px_20px_0px_rgba(0,0,0,0.3)] shadow-white"
                 });
             }
@@ -78,7 +77,7 @@ export default function Room() {
                 </div>
 
                 <div className="col-span-10 flex justify-center flex-col items-center gap-4 md:gap-6 2xl:gap-8">
-                    <SquareBoard/>
+                    <SquareBoard setMessage={setMessage}/>
                     <SquardBoardButtonGroup setMessage={setMessage}/>
                 </div>
 

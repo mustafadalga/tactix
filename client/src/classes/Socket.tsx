@@ -12,7 +12,7 @@ class Socket {
 
     constructor() {
         this.serverURL = process.env.REACT_APP_SERVER_URL || ""
-        this.socket = io(this.serverURL)
+        this.socket = io(this.serverURL);
     }
 
     joinRoom(roomID: string, username: string) {
@@ -25,12 +25,9 @@ class Socket {
     setRoomInformation(navigate: any, dispatch: any) {
 
         this.socket.on('roomInformation', (response: IRoomInformationResponse) => {
+
             if (response.status) {
                 return dispatch(setRoomInformation(response.room));
-            }
-
-            if (response.statusCode == "duplicateUsername") {
-                return navigate(`/join/${response.roomID}/?message=${response.message}`)
             }
 
             return navigate(`/?message=${response.message}`)
@@ -73,8 +70,8 @@ class Socket {
             setMessage(message)
         });
     }
-
 }
 
 const socketInstance = new Socket();
+
 export default socketInstance;
