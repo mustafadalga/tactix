@@ -1,8 +1,8 @@
 import axios from "axios";
 
 export const roomService = {
-    createRoom() {
-        return axios.post('/room/create');
+    createRoom(gameOwner: string) {
+        return axios.post('/room/create', {gameOwner: gameOwner});
     },
     getRoom(roomID: string) {
         return axios.get(`/room/${roomID}`);

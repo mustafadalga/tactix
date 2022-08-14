@@ -9,6 +9,7 @@ const RoomSchema = new mongoose.Schema({
         username: {
             type: String,
             trim: true,
+            required: true
         },
         score: {
             type: Number,
