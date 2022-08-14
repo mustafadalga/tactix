@@ -30,9 +30,12 @@ class Socket {
             socket.join(roomID);
             socket.emit('message', 'Welcome!');
             socket.broadcast.to(roomID).emit('message', `${username} has joined!`);
-            await this.handleRoomInformation(socket.id, roomID, username);
-            this.emitRoomInformation(roomID);
-            this.emitMoves(roomID);
+            const roomStatus = await this.handleRoomInformation(socket.id, roomID, username);
+
+            if (roomStatus) {
+                this.emitRoomInformation(roomID);
+                this.emitMoves(roomID);
+            }
         });
     }
 
@@ -106,6 +109,8 @@ class Socket {
     }
 
     async handleRoomInformation (socketID, roomID, username) {
+        let status = false;
+
         try {
 
             const room = await Room.findById(roomID);
@@ -115,6 +120,16 @@ class Socket {
                     status: false,
                     message: "The room's information could no be  found."
                 });
+            }
+
+            // Check username authorization
+            if (room.isGameStarted){
+                if (![room.playerLeft.username,room.playerRight.username].includes(username)){
+                    return this.io.to(roomID).emit('roomInformation', {
+                        status: false,
+                        message: "You are not authorized to enter this game!"
+                    });
+                }
             }
 
             // Update Username
@@ -132,7 +147,6 @@ class Socket {
                 room.playerRight.socketID = socketID;
             }
 
-
             // Define Move Order and Start Game
             if (!room.isGameStarted && room.playerLeft.username && room.playerRight.username) {
                 room.isGameStarted = true;
@@ -140,13 +154,15 @@ class Socket {
             }
 
             await room.save();
-
+            status = true;
 
         } catch (error) {
             this.io.to(roomID).emit('roomInformation', {
                 status: false,
                 message: "An error occurred during updating room information.Please refresh the page and try again."
             });
+        }finally {
+            return status;
         }
     }
 
@@ -154,13 +170,6 @@ class Socket {
     async emitRoomInformation (roomID) {
         try {
             const room = await Room.findById(roomID);
-
-            if (!room) {
-                return this.io.to(roomID).emit('roomInformation', {
-                    status: false,
-                    message: "The room's information could no be  found."
-                });
-            }
 
             this.io.to(roomID).emit('roomInformation', {
                 room: room,
