@@ -26,16 +26,19 @@ class Socket {
     }
 
     joinRoom (socket) {
-        socket.on('joinRoom', ({ roomID, username }) => {
+        socket.on('joinRoom', async ({ roomID, username }) => {
             socket.join(roomID);
             socket.emit('message', 'Welcome!');
             socket.broadcast.to(roomID).emit('message', `${username} has joined!`);
-            this.handleAndEmitRoomInformation(socket.id, roomID, username);
+            await this.handleRoomInformation(socket.id, roomID, username);
+            this.emitRoomInformation(roomID);
             this.emitMoves(roomID);
         });
     }
 
     createMove (socket) {
+        const that = this;
+
         socket.on('createMove', async ({ roomID, move }) => {
 
             try {
@@ -62,6 +65,8 @@ class Socket {
                     status: true
                 });
 
+                await that.changeMoveOrder(roomID);
+                that.emitRoomInformation(roomID);
 
             } catch (error) {
                 return this.io.to(roomID).emit('lastMove', {
@@ -100,8 +105,9 @@ class Socket {
         })
     }
 
-    async handleAndEmitRoomInformation (socketID, roomID, username) {
+    async handleRoomInformation (socketID, roomID, username) {
         try {
+
             const room = await Room.findById(roomID);
 
             if (!room) {
@@ -112,25 +118,20 @@ class Socket {
             }
 
             // Update Username
-            if (!room.playerLeft.username) {
-                room.playerLeft.username = username;
-            } else if (!room.playerRight.username && room.playerLeft.username != username) {
-                room.playerRight.username = username;
-            } else if (!room.playerRight.username && room.playerLeft.username == username) {
-                return this.io.to(roomID).emit('roomInformation', {
-                    status: false,
-                    statusCode: "duplicateUsername",
-                    roomID: roomID,
-                    message: "Please use a different username!"
-                });
+            if (!room.isGameStarted) {
+
+                if (!room.playerRight.username && room.playerLeft.username != username) {
+                    room.playerRight.username = username;
+                }
             }
 
-            // Update socketID
+            //Update socketID
             if (room.playerLeft.username == username) {
                 room.playerLeft.socketID = socketID;
             } else if (room.playerRight.username == username) {
                 room.playerRight.socketID = socketID;
             }
+
 
             // Define Move Order and Start Game
             if (!room.isGameStarted && room.playerLeft.username && room.playerRight.username) {
@@ -140,18 +141,39 @@ class Socket {
 
             await room.save();
 
+
+        } catch (error) {
+            this.io.to(roomID).emit('roomInformation', {
+                status: false,
+                message: "An error occurred during updating room information.Please refresh the page and try again."
+            });
+        }
+    }
+
+
+    async emitRoomInformation (roomID) {
+        try {
+            const room = await Room.findById(roomID);
+
+            if (!room) {
+                return this.io.to(roomID).emit('roomInformation', {
+                    status: false,
+                    message: "The room's information could no be  found."
+                });
+            }
+
             this.io.to(roomID).emit('roomInformation', {
                 room: room,
                 status: true
             });
 
+
         } catch (error) {
-            return this.io.to(roomID).emit('roomInformation', {
+            this.io.to(roomID).emit('roomInformation', {
                 status: false,
-                message: "An error occurred during fetching room information.Please refresh the page and try again."
+                message: "An error occurred during emiting room information.Please refresh the page and try again."
             });
         }
-
     }
 
     async emitMoves (roomID) {
@@ -177,6 +199,19 @@ class Socket {
             });
         }
 
+    }
+
+
+    async changeMoveOrder (roomID) {
+        const room = await Room.findById(roomID);
+
+        if (room.moveOrder == room.playerLeft.username) {
+            room.moveOrder = room.playerRight.username
+        } else if (room.moveOrder == room.playerRight.username) {
+            room.moveOrder = room.playerLeft.username
+        }
+
+        room.save();
     }
 
     getRandomUser () {
