@@ -21,6 +21,8 @@ export default function Room() {
     });
     const username = useSelector((state: RootState) => state.tactix.localStorage.username);
     const room = useSelector((state: RootState) => state.tactix.room);
+
+
     const handleRoom = async () => {
 
         if (!username) {
@@ -38,6 +40,15 @@ export default function Room() {
     useEffect(() => {
         handleRoom();
     }, []);
+
+    // Destroy Messages
+    useEffect(() => {
+        const interval = setInterval(() => {
+            setMessage("");
+        }, 2500);
+
+        return () => clearInterval(interval);
+    }, [ message ]);
 
     useEffect(() => {
         if (room.moveOrder) {
