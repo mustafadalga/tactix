@@ -54,6 +54,12 @@ class Socket {
         });
     }
 
+    startNewGame(roomID: string) {
+        this.socket.emit("startNewGame", {
+            roomID
+        });
+    }
+
     setRemovedStone(dispatch: any, setMessage: any) {
         this.socket.on('lastMove', (response: IRemovedStoneResponse) => {
 

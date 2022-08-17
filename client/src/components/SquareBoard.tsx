@@ -18,18 +18,14 @@ export default function Board({ setMessage }: Props) {
     const selectedStones = useSelector((state: RootState) => state.tactix.selectedStones);
     const dispatch = useDispatch();
 
-
-    useEffect(() => {
-        handleStone();
-    }, [ selectedStones ]);
-
+    // Append stone
     const appendSelectedStone = (stone: IStoneInterface) => {
-        if (!room.isGameStarted) {
-            return setMessage("The game has not started yet!");
-        }
-
         if (room.isGameFinished) {
             return setMessage("Game over!");
+        }
+
+        if (!room.isGameStarted) {
+            return setMessage("The game has not started yet!");
         }
 
         if (room.moveOrder != username) {
@@ -40,6 +36,11 @@ export default function Board({ setMessage }: Props) {
 
         dispatch(setSelectedStone(stone));
     }
+
+    // Handle stone situation
+    useEffect(() => {
+        handleStone();
+    }, [ selectedStones ]);
 
     const handleStone = () => {
         if (!tactix.isChainCheck(selectedStones)) return;

@@ -38,9 +38,17 @@ export default function Room() {
 
     }
 
+    // Handle room information
     useEffect(() => {
         handleRoom();
     }, []);
+
+    // Delete moveOrder localStorage value when game starts
+    useEffect(() => {
+        if (room.isGameStarted) {
+            dispatch(removeLocalStorageKey('gameOwner'));
+        }
+    }, [ room.isGameStarted ]);
 
     // Destroy Messages
     useEffect(() => {
@@ -70,34 +78,29 @@ export default function Room() {
             }
         }
 
-    }, [ room.moveOrder ]);
 
-    // Delete moveOrder localStorage value when game starts
-    useEffect(() => {
-        if (room.isGameStarted) {
-            dispatch(removeLocalStorageKey('gameOwner'));
-        }
-    }, [ room.isGameStarted ]);
+    }, [ room.moveOrder ]);
 
 
     // Delete player box-shadow effect when game over and add animate for winner.
     useEffect(() => {
         if (room.isGameFinished) {
 
-            if (room.moveOrder == room.playerLeft.username) {
+            if (room.winnerPlayer == room.playerLeft.username) {
                 return updatePlayerClasses({
                     playerLeft: "animate-player-left",
                     playerRight: "",
                 });
             }
 
-            if (room.moveOrder == room.playerRight.username) {
+            if (room.winnerPlayer == room.playerRight.username) {
                 return updatePlayerClasses({
                     playerLeft: "",
                     playerRight: "animate-player-right"
                 });
             }
         }
+
     }, [ room.isGameFinished ])
 
 

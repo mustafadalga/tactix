@@ -21,6 +21,7 @@ class Socket {
         this.io.on('connection', (socket) => {
 
             this.joinRoom(socket);
+            this.startNewGame(socket);
             this.createMove(socket);
             this.disConnect(socket);
         });
@@ -85,30 +86,37 @@ class Socket {
         });
     }
 
-    disConnect (socket) {
-        socket.on('disconnect', async () => {
 
-            const room = await Room.findOne({
-                $or: [
-                    { 'playerLeft.socketID': socket.id },
-                    { 'playerRight.socketID': socket.id }
-                ]
-            });
+    async startNewGame (socket) {
+        socket.on('startNewGame', async ({ roomID }) => {
+            try {
+                const room = await Room.findById(roomID);
 
-            if (!room) return;
+                if (!room) {
+                    return this.io.to(roomID).emit('roomInformation', {
+                        status: false,
+                        message: "The room's information could no be  found."
+                    });
+                }
 
-            let player;
+                room.isGameFinished = false;
+                room.isGameStarted = true;
+                room.winnerPlayer = undefined;
+                room.moveOrder = room[this.getRandomUser()].username;
+                await room.save();
+                await Move.deleteMany({ roomID: roomID });
 
-            if (room.playerLeft.socketID == socket.id) {
-                player = room.playerLeft.username;
-                room.playerLeft.socketID = undefined;
-            } else if (room.playerRight.socketID == socket.id) {
-                player = room.playerRight.username;
-                room.playerRight.socketID = undefined;
+
+                this.emitRoomInformation(roomID);
+                this.emitMoves(roomID);
+
+
+            } catch (error) {
+                this.io.to(roomID).emit('roomInformation', {
+                    status: false,
+                    message: "An error occurred during starting new game.Please refresh the page and try again."
+                });
             }
-
-            await room.save();
-            socket.broadcast.to(room._id).emit('message', `${player} has left!`);
         })
     }
 
@@ -214,7 +222,6 @@ class Socket {
 
     }
 
-
     async changeMoveOrder (roomID) {
         const room = await Room.findById(roomID);
 
@@ -234,7 +241,9 @@ class Socket {
             if (moves.length == this.numberOfStones) {
 
                 room.isGameFinished = true;
+                room.isGameStarted = false;
                 room.winnerPlayer = room.moveOrder;
+                room.moveOrder = undefined;
 
                 if (room.winnerPlayer == room.playerLeft.username) {
                     room.playerLeft.score += 1;
@@ -257,6 +266,33 @@ class Socket {
         } else if (number == 2) {
             return 'playerRight';
         }
+    }
+
+    disConnect (socket) {
+        socket.on('disconnect', async () => {
+
+            const room = await Room.findOne({
+                $or: [
+                    { 'playerLeft.socketID': socket.id },
+                    { 'playerRight.socketID': socket.id }
+                ]
+            });
+
+            if (!room) return;
+
+            let player;
+
+            if (room.playerLeft.socketID == socket.id) {
+                player = room.playerLeft.username;
+                room.playerLeft.socketID = undefined;
+            } else if (room.playerRight.socketID == socket.id) {
+                player = room.playerRight.username;
+                room.playerRight.socketID = undefined;
+            }
+
+            await room.save();
+            socket.broadcast.to(room._id).emit('message', `${player} has left!`);
+        })
     }
 }
 

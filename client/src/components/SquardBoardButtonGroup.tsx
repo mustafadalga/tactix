@@ -27,6 +27,13 @@ export default function SquardBoardButtonGroup({setMessage}: Props) {
         dispatch(removeSelectedStones());
     }
 
+    const handleNewGameButton = () => {
+        Socket.startNewGame(roomID);
+
+        // Destroy  selected stones when new game start
+        dispatch(removeSelectedStones());
+    }
+
     return (
         <div className="flex justify-center items-center gap-6 flex-col sm:flex-row">
             <button
@@ -36,9 +43,10 @@ export default function SquardBoardButtonGroup({setMessage}: Props) {
                 <span>Get Stones</span>
             </button>
             <button
+                onClick={() => handleNewGameButton()}
                 className="flex items-center gap-4 bg-white text-black py-2.5 px-6 rounded-md shadow-md whitespace-nowrap">
                 <IconRefresh className="h-6"/>
-                <span>New Game</span>
+                <span>Start New Game</span>
             </button>
         </div>
     )
