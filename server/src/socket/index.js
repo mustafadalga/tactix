@@ -109,6 +109,7 @@ class Socket {
 
                 this.emitRoomInformation(roomID);
                 this.emitMoves(roomID);
+                socket.emit('message', 'New game has started!');
 
 
             } catch (error) {
@@ -291,7 +292,7 @@ class Socket {
             }
 
             await room.save();
-            socket.broadcast.to(room._id).emit('message', `${player} has left!`);
+            socket.broadcast.to(room._id.toString()).emit('message', `${player} has left!`);
         })
     }
 }
