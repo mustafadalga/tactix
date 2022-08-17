@@ -5,7 +5,6 @@ const path = require('path');
 const { createServer } = require("http");
 const PORT = process.env.PORT || 3001;
 const roomRouter = require('./router/room')
-const moveRouter = require('./router/move')
 
 const app = express();
 const httpServer = createServer(app);
@@ -17,7 +16,6 @@ new Socket(httpServer);
 app.use(express.json())
 app.use(express.urlencoded({ extended: true }));
 app.use(roomRouter);
-app.use(moveRouter);
 app.use(express.static(path.resolve(__dirname, '../../client/build')));
 
 httpServer.listen(PORT, () => {
