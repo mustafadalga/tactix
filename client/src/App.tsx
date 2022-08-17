@@ -6,18 +6,21 @@ import Join from "./pages/Join";
 
 function App() {
 
-  return (
-      <div className="App w-screen h-screen">
-          <Routes>
-              <Route path="/" element={<Home/>}/>
-              <Route path="room/:roomID" element={<Room/>}/>
-              <Route path="/join/">
-                  <Route path=":roomID" element={<Join />} />
-                  <Route path="" element={<Join />} />
-              </Route>
-          </Routes>
-      </div>
-  );
+    return (
+        <div className="App w-screen h-screen">
+            <Routes>
+                <Route path="/" element={<Home/>}/>
+                <Route path="/room/">
+                    <Route path=":roomID" element={<Room/>}/>
+                    <Route path="" element={<Room/>}/>
+                </Route>
+                <Route path="/join/">
+                    <Route path=":roomID" element={<Join/>}/>
+                    <Route path="" element={<Join/>}/>
+                </Route>
+            </Routes>
+        </div>
+    );
 }
 
 export default App;

@@ -1,7 +1,7 @@
 import ScoreNumber from "./ScoreNumber";
 import ScoreTitle from "./ScoreTitle";
 
-type Props = {
+interface Props {
     playerLeft: number,
     playerRight: number
 }

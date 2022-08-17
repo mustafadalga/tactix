@@ -19,6 +19,8 @@ export default function SquardBoardButtonGroup({setMessage}: Props) {
     const handleGetStones = () => {
         setMessage("");
 
+        if (!room.isGameStarted) return;
+
         if (!selectedStones.length) {
             return setMessage("Please select at least one stone!");
         }

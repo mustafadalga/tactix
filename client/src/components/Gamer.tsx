@@ -1,6 +1,6 @@
-type Props= {
-gamer:string,
-className:string
+interface Props {
+    gamer: string,
+    className: string
 }
 export default function Gamer({ gamer, className }: Props) {
 

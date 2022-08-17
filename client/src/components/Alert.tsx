@@ -1,4 +1,4 @@
-type Props = {
+interface Props {
     type: string,
     message: string,
     className?: string
