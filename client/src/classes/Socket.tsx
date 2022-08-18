@@ -11,7 +11,7 @@ class Socket {
     private socket: ISocket
 
     constructor() {
-        this.serverURL = process.env.REACT_APP_SERVER_URL || ""
+        this.serverURL = import.meta.env.VITE__REACT_APP_SERVER_URL || ""
         this.socket = io(this.serverURL);
     }
 
