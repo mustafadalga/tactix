@@ -1,12 +1,12 @@
-import { Link } from "react-router-dom";
-import { roomService } from "../services";
-import { useDispatch, useSelector } from "react-redux";
-import { setGameOwnerStatus, setRoomInformation, setUsername } from "../store/tactix";
-import { RootState } from "../store";
-import ClipBoard from "../icons/ClipBoard";
-import { copy } from "../utils";
+import { useEffect, useState } from "react";
 import axios from "axios";
-import React, { useEffect, useState } from "react";
+import { Link } from "react-router-dom";
+import { useDispatch, useSelector } from "react-redux";
+import { roomService } from "@/services";
+import { setGameOwnerStatus, setRoomInformation, setUsername } from "@/store/tactix";
+import { RootState } from "@/store";
+import ClipBoard from "@/icons/ClipBoard";
+import { copy } from "@/utils";
 import Alert from "./Alert";
 
 type ErrorResponse = {

@@ -1,5 +1,5 @@
-import IStoneInterface from "../types/IStoneInterface";
-import { Direction } from "../enums";
+import IStoneInterface from "@/types/IStoneInterface";
+import { Direction } from "@/enums";
 
 export default class Tactix {
     private rowLength: number

@@ -1,14 +1,14 @@
-import SquareBoard from "../components/SquareBoard";
-import Gamer from "../components/Gamer";
-import Score from "../components/Score";
 import { useNavigate, useParams } from "react-router-dom";
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import Alert from "../components/Alert";
-import { RootState } from "../store";
-import Socket from "../classes/Socket";
-import SquardBoardButtonGroup from "../components/SquardBoardButtonGroup";
-import { removeLocalStorageKey } from "../store/tactix";
+import SquareBoard from "@/components/SquareBoard";
+import Gamer from "@/components/Gamer";
+import Score from "@/components/Score";
+import Alert from "@/components/Alert";
+import { RootState } from "@/store";
+import Socket from "@/classes/Socket";
+import SquardBoardButtonGroup from "@/components/SquardBoardButtonGroup";
+import { removeLocalStorageKey } from "@/store/tactix";
 
 export default function Room() {
 

@@ -1,6 +1,6 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit'
-import IStoneInterface from "../types/IStoneInterface";
-import TactixState from "../types/ITactixState";
+import IStoneInterface from "@/types/IStoneInterface";
+import TactixState from "@/types/ITactixState";
 
 
 const localStorageName = "tactix";

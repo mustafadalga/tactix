@@ -1,7 +1,8 @@
-import CreateRoom from "../components/CreateRoom";
-import Alert from "../components/Alert";
+import CreateRoom from "@/components/CreateRoom";
+import Alert from "@/components/Alert";
 import  { useEffect, useState } from "react";
 import {  useSearchParams } from "react-router-dom";
+
 
 const Home = () => {
     let [ searchParams, setSearchParams ] = useSearchParams();

@@ -1,9 +1,9 @@
-import JoinRoom from "../components/JoinRoom";
 import { useEffect, useState } from "react";
 import { useParams, useSearchParams } from "react-router-dom";
-import { setRoomInformation } from "../store/tactix";
 import { useDispatch } from "react-redux";
-import Alert from "../components/Alert";
+import JoinRoom from "@/components/JoinRoom";
+import Alert from "@/components/Alert";
+import { setRoomInformation } from "@/store/tactix";
 
 
 export default function Join() {

@@ -1,10 +1,10 @@
-import { useDispatch, useSelector } from "react-redux";
-import { RootState } from "../store";
-import { setRoomInformation, setUsername } from "../store/tactix";
-import React, { useState } from "react";
+import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
+import { useDispatch, useSelector } from "react-redux";
+import { RootState } from "@/store";
+import { setRoomInformation, setUsername } from "@/store/tactix";
 import Alert from "./Alert";
-import { fetchRoom } from "../composables";
+import { fetchRoom } from "@/composables";
 
 interface Response {
     message: string,

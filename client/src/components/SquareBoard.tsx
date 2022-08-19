@@ -1,10 +1,10 @@
-import Stone from "./Stone"
 import { useEffect } from "react";
-import IStoneInterface from "../types/IStoneInterface";
-import Tactix from "../classes/Tactix";
 import { useDispatch, useSelector } from "react-redux";
-import { RootState } from "../store";
-import { removeSelectedStones, setSelectedStone } from "../store/tactix";
+import Stone from "./Stone"
+import IStoneInterface from "@/types/IStoneInterface";
+import Tactix from "@/classes/Tactix";
+import { RootState } from "@/store";
+import { removeSelectedStones, setSelectedStone } from "@/store/tactix";
 
 interface Props {
     setMessage: (params: any) => any;

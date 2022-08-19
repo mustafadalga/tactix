@@ -1,10 +1,10 @@
 import { io } from "socket.io-client"
-import { setRemovedStone, setRemovedStones, setRoomInformation } from "../store/tactix";
-import ISocket from "../types/ISocket";
-import IRoomInformationResponse from "../types/IRoomInformationResponse";
-import IRemovedStoneResponse from "../types/IRemovedStoneResponse";
-import IRemovedStonesResponse from "../types/IRemovedStonesResponse";
-import IStoneInterface from "../types/IStoneInterface";
+import { setRemovedStone, setRemovedStones, setRoomInformation } from "@/store/tactix";
+import ISocket from "@/types/ISocket";
+import IRoomInformationResponse from "@/types/IRoomInformationResponse";
+import IRemovedStoneResponse from "@/types/IRemovedStoneResponse";
+import IRemovedStonesResponse from "@/types/IRemovedStonesResponse";
+import IStoneInterface from "@/types/IStoneInterface";
 
 class Socket {
     private serverURL: string

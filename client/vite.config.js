@@ -1,5 +1,6 @@
 import { defineConfig, loadEnv } from 'vite'
 import react from '@vitejs/plugin-react';
+const path = require('path')
 
 export default ({ mode }) => {
     process.env = {
@@ -8,6 +9,11 @@ export default ({ mode }) => {
     }
     return defineConfig({
         plugins: [ react() ],
+        resolve: {
+            alias: {
+                '@': path.resolve(__dirname, './src')
+            },
+        },
         server: {
             port: 3000,
             proxy: {

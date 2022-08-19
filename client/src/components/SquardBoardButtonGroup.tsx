@@ -1,9 +1,9 @@
-import IconHand from "../icons/IconHand";
-import IconRefresh from "../icons/IconRefresh";
 import { useDispatch, useSelector } from "react-redux";
-import { RootState } from "../store";
-import Socket from "../classes/Socket";
-import { removeSelectedStones } from "../store/tactix";
+import IconHand from "@/icons/IconHand";
+import IconRefresh from "@/icons/IconRefresh";
+import { RootState } from "@/store";
+import Socket from "@/classes/Socket";
+import { removeSelectedStones } from "@/store/tactix";
 
 interface Props {
     setMessage: (params: any) => any;
