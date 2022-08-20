@@ -5,7 +5,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { roomService } from "@/services";
 import { setGameOwnerStatus, setRoomInformation, setUsername } from "@/store/tactix";
 import { RootState } from "@/store";
-import ClipBoard from "@/icons/ClipBoard";
+import IconClipBoard from "@/icons/IconClipBoard";
 import { copy } from "@/utils";
 import Alert from "./Alert";
 
@@ -86,7 +86,7 @@ export default function CreateRoom() {
                         <div className="col-span-10 flex items-center gap-4">
                             <span>{roomID}</span>
                             <span onClick={() => copy(roomID)}>
-                                <ClipBoard/>
+                                <IconClipBoard/>
                             </span>
                         </div>
 
@@ -97,7 +97,7 @@ export default function CreateRoom() {
                         <div className="col-span-10 flex items-center gap-4">
                             <Link to={joinURL} className="text-blue-500">{fullJoinURL}</Link>
                             <span onClick={() => copy(fullJoinURL)}>
-                                <ClipBoard/>
+                                <IconClipBoard/>
                             </span>
                         </div>
 

@@ -1,7 +1,7 @@
 interface Props {
     className?: string
 }
-const ClipBoard = ({className}: Props) => {
+const IconClipBoard = ({className}: Props) => {
 
     return (
         <svg className={`w-6 h-6 cursor-pointer text-gray-500 ${className}`} fill="currentColor" viewBox="0 0 20 20"
@@ -12,4 +12,4 @@ const ClipBoard = ({className}: Props) => {
     )
 }
 
-export default ClipBoard;
+export default IconClipBoard;
