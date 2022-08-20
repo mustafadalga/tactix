@@ -68,7 +68,7 @@ export default function Board({ setMessage }: Props) {
 
     return (
         <div
-            className="grid grid-rows-4 grid-cols-4 w-60 h-60 2xs:w-64 2xs:h-64  xs:w-[25rem] xs:h-[25rem] sm:w-[30rem] sm:h-[30rem] md:w-[36rem] md:h-[36rem]  border-black border-2 ">
+            className="grid grid-rows-4 grid-cols-4 w-60 h-60 2xs:w-64 2xs:h-64  xs:w-[25rem] xs:h-[25rem] sm:w-[30rem] sm:h-[30rem] md:w-[36rem] md:h-[36rem]  border-white border-2 ">
 
             {tactix.getStones().map((stone, stoneIndex) =>
 

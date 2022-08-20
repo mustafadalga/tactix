@@ -65,7 +65,7 @@ export default function Room() {
         if (room.moveOrder) {
             if (room.moveOrder == room.playerLeft.username) {
                 return updatePlayerClasses({
-                    playerLeft: "shadow-[0_0px_20px_0px_rgba(0,0,0,0.3)] shadow-white",
+                    playerLeft: "shadow-[0_0px_24px_0px_rgba(0,0,0,0.3)] shadow-white border-2 border-white border-l-0",
                     playerRight: "",
                 });
             }
@@ -73,7 +73,7 @@ export default function Room() {
             if (room.moveOrder == room.playerRight.username) {
                 return updatePlayerClasses({
                     playerLeft: "",
-                    playerRight: "shadow-[0_0px_20px_0px_rgba(0,0,0,0.3)] shadow-white"
+                    playerRight: "shadow-[0_0px_24px_0px_rgba(0,0,0,0.3)] shadow-white border-2 border-white border-r-0"
                 });
             }
         }

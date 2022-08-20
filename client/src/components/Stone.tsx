@@ -5,7 +5,7 @@ interface Props {
 }
 
 export default function Stone({stone, selectedStone, appendSelectedStone}: Props) {
-    let bigCircleClasses: string = "rounded-full grid place-items-center  w-full h-full  border-black border-2 transition-all duration-500 cursor-pointer";
+    let bigCircleClasses: string = "rounded-full grid place-items-center  w-full h-full  border-white border-2 transition-all duration-500 cursor-pointer";
     let smallCircleClasses: string = "rounded-full h-2/6 w-2/6 transition-all duration-300";
 
 
@@ -18,7 +18,7 @@ export default function Stone({stone, selectedStone, appendSelectedStone}: Props
     }
 
     return (
-        <div className="grid place-items-center border-black border-2 p-2.5">
+        <div className="grid place-items-center border-white border-2 p-2.5">
 
             <div
                 onClick={() => appendSelectedStone(stone)}
