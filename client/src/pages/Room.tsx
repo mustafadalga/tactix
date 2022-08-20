@@ -88,7 +88,7 @@ export default function Room() {
 
             if (room.winnerPlayer == room.playerLeft.username) {
                 return updatePlayerClasses({
-                    playerLeft: "animate-player-left",
+                    playerLeft: "animate-player",
                     playerRight: "",
                 });
             }
@@ -96,7 +96,7 @@ export default function Room() {
             if (room.winnerPlayer == room.playerRight.username) {
                 return updatePlayerClasses({
                     playerLeft: "",
-                    playerRight: "animate-player-right"
+                    playerRight: "animate-player"
                 });
             }
         }
@@ -105,7 +105,7 @@ export default function Room() {
 
 
     return (
-        <div className="relative w-full h-full grid grid-rows-[15%_85%] bg-indigo-900">
+        <div className="relative w-full h-full grid grid-rows-[15%_85%] bg-indigo-9000 bg-no-repeat	bg-cover bg-room">
 
             <section className="w-full flex items-center justify-center p-4">
                 {room.playerLeft && room.playerRight &&
@@ -118,7 +118,7 @@ export default function Room() {
                 <div className="col-span-1 grid">
                     {room.playerLeft &&
                         <Gamer gamer={room.playerLeft.username}
-                               className={`rounded-tr-3xl rounded-br-3xl bg-light-blue text-white ${playerClasses.playerLeft}`}/>
+                               className={`rounded-tr-3xl rounded-br-3xl ${playerClasses.playerLeft}`}/>
                     }
                 </div>
 
@@ -130,7 +130,7 @@ export default function Room() {
                 <div className="col-span-1 grid">
                     {room.playerRight &&
                         <Gamer gamer={room.playerRight.username}
-                               className={`rounded-tl-3xl rounded-bl-3xl ml-auto bg-cyber-yellow text-black ${playerClasses.playerRight}`}/>
+                               className={`rounded-tl-3xl rounded-bl-3xl ml-auto ${playerClasses.playerRight}`}/>
                     }
                 </div>
 

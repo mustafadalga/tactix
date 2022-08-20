@@ -40,14 +40,14 @@ export default function SquardBoardButtonGroup({setMessage}: Props) {
         <div className="flex justify-center items-center gap-6 flex-col sm:flex-row">
             <button
                 onClick={()=>handleGetStones()}
-                className="flex items-center gap-4 bg-white text-black py-2.5 px-6 rounded-md shadow-md whitespace-nowrap">
-                <IconHand className="h-6"/>
+                className="flex items-center gap-4 bg-white text-dodger-blue py-2.5 px-6 rounded-md whitespace-nowrap border-dodger-blue border-[1.5px]">
+                <IconHand className="h-6 fill-dodger-blue"/>
                 <span>Get Stones</span>
             </button>
             <button
                 onClick={() => handleNewGameButton()}
-                className="flex items-center gap-4 bg-white text-black py-2.5 px-6 rounded-md shadow-md whitespace-nowrap">
-                <IconRefresh className="h-6"/>
+                className="flex items-center gap-4 bg-white text-dodger-blue py-2.5 px-6 rounded-md whitespace-nowrap border-dodger-blue border-[1.5px]">
+                <IconRefresh className="h-6 fill-dodger-blue"/>
                 <span>Start New Game</span>
             </button>
         </div>

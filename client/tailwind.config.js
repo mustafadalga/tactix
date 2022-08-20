@@ -8,30 +8,24 @@ module.exports = {
     theme: {
         extend: {
             colors: {
-                "cyber-yellow": "#FFD500",
-                "light-blue": "#03a9f4"
+                "dodger-blue": "rgba(16,137,255,.9)",
+                "light-red": "hsla(0, 100%, 50%, 0.6)"
             },
             keyframes: {
-                'player-left': {
+                'player': {
                     'from': {
-                        "background-color": "#EF444499"
+                        "background-color": "hsla(0, 100%, 50%, 0.6)"
                     },
                     'to': {
-                        "background-color": '#03A9F4',
-                    },
-                },
-                'player-right': {
-                    'from': {
-                        "background-color": "#EF444499"
-                    },
-                    'to': {
-                        "background-color": '#FFD500',
+                        "background-color": 'rgba(16,137,255,.9)',
                     },
                 },
             },
             animation: {
-                'player-left': 'player-left .4s infinite',
-                'player-right': 'player-right .4s infinite',
+                'player': 'player .4s infinite',
+            },
+            backgroundImage: {
+                'room': "url('@/assets/images/bg-room.png')",
             }
         },
         screens: {
