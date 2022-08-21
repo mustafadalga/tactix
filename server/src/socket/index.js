@@ -33,7 +33,7 @@ class Socket {
             socket.join(roomID);
             socket.emit('message', 'Welcome!');
             socket.broadcast.to(roomID).emit('message', `${username} has joined!`);
-            const roomStatus = await this.handleRoomInformation(socket.id, roomID, username);
+            const roomStatus = await this.handleRoomInformation(socket, roomID, username);
             if (roomStatus) {
                 this.emitRoomInformation(roomID);
                 this.emitMoves(roomID);
@@ -59,9 +59,9 @@ class Socket {
                 const response = await Promise.all(promises);
 
                 if (!response.length) {
-                    return this.io.to(roomID).emit('lastMove', {
+                    return socket.emit('lastMove', {
                         status: false,
-                        message: "The move could not be created. Please try again."
+                        message: "The move could not be created. Please try again !"
                     });
                 }
 
@@ -77,7 +77,7 @@ class Socket {
 
 
             } catch (error) {
-                return this.io.to(roomID).emit('lastMove', {
+                return socket.emit('lastMove', {
                     status: false,
                     message: "The move could not be created. Please try again."
                 });
@@ -93,9 +93,9 @@ class Socket {
                 const room = await Room.findById(roomID);
 
                 if (!room) {
-                    return this.io.to(roomID).emit('roomInformation', {
+                    return socket.emit('roomInformation', {
                         status: false,
-                        message: "The room's information could no be  found."
+                        message: "The room's information could not be found!"
                     });
                 }
 
@@ -112,7 +112,7 @@ class Socket {
 
 
             } catch (error) {
-                this.io.to(roomID).emit('roomInformation', {
+                socket.emit('roomInformation', {
                     status: false,
                     message: "An error occurred during starting new game.Please refresh the page and try again."
                 });
@@ -152,7 +152,7 @@ class Socket {
         });
     }
 
-    async handleRoomInformation (socketID, roomID, username) {
+    async handleRoomInformation (socket, roomID, username) {
         let status = false;
 
         try {
@@ -160,16 +160,16 @@ class Socket {
             const room = await Room.findById(roomID);
 
             if (!room) {
-                return this.io.to(roomID).emit('roomInformation', {
+                return socket.emit('roomInformation', {
                     status: false,
-                    message: "The room's information could no be  found."
+                    message: "The room's information could not be found!"
                 });
             }
 
             // Check username authorization
             if (room.isGameStarted) {
                 if (![ room.playerLeft.username, room.playerRight.username ].includes(username)) {
-                    return this.io.to(roomID).emit('roomInformation', {
+                    return socket.emit('roomInformation', {
                         status: false,
                         message: "You are not authorized to enter this game!"
                     });
@@ -186,9 +186,9 @@ class Socket {
 
             //Update socketID
             if (room.playerLeft.username == username) {
-                room.playerLeft.socketID = socketID;
+                room.playerLeft.socketID = socket.id;
             } else if (room.playerRight.username == username) {
-                room.playerRight.socketID = socketID;
+                room.playerRight.socketID = socket.id;
             }
 
             // Define Move Order and Start Game
@@ -201,7 +201,7 @@ class Socket {
             status = true;
 
         } catch (error) {
-            this.io.to(roomID).emit('roomInformation', {
+            socket.emit('roomInformation', {
                 status: false,
                 message: "An error occurred during updating room information.Please refresh the page and try again."
             });
@@ -224,7 +224,7 @@ class Socket {
         } catch (error) {
             this.io.to(roomID).emit('roomInformation', {
                 status: false,
-                message: "An error occurred during emiting room information.Please refresh the page and try again."
+                message: "An error occurred during emiting room information. Please refresh the page and try again!"
             });
         }
     }
