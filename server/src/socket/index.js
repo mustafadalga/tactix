@@ -125,6 +125,7 @@ class Socket {
 
             try {
                 const room = await Room.findByIdAndDelete(roomID);
+                await Move.deleteMany({ roomID: roomID });
 
                 if (!room) {
                     return socket.emit('gameExit', {
