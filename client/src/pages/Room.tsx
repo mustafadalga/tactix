@@ -9,6 +9,9 @@ import { RootState } from "@/store";
 import Socket from "@/classes/Socket";
 import SquardBoardButtonGroup from "@/components/SquardBoardButtonGroup";
 import { removeLocalStorageKey } from "@/store/tactix";
+import ModalWarningGameExit from "@/components/ModalWarningGameExit";
+import ModalConfirmGameExit from "@/components/ModalConfirmGameExit";
+
 
 export default function Room() {
 
@@ -22,6 +25,7 @@ export default function Room() {
     });
     const username = useSelector((state: RootState) => state.tactix.localStorage.username);
     const room = useSelector((state: RootState) => state.tactix.room);
+    const modals = useSelector((state: RootState) => state.tactix.modals);
 
 
     const handleRoom = async () => {
@@ -35,7 +39,8 @@ export default function Room() {
         Socket.setMessage(setMessage);
         Socket.setRemovedStones(dispatch, setMessage);
         Socket.setRemovedStone(dispatch, setMessage);
-
+        Socket.setGameExitStatus(dispatch);
+        Socket.showGameExitWarning(dispatch, username);
     }
 
     // Handle room information
@@ -103,9 +108,9 @@ export default function Room() {
 
     }, [ room.isGameFinished ])
 
-
     return (
-        <div className="relative w-full h-full grid grid-rows-[15%_85%] bg-indigo-9000 bg-no-repeat	bg-cover bg-room">
+        <div
+            className="relative w-full h-full grid grid-rows-[15%_85%] bg-indigo-9000 bg-no-repeat	bg-cover bg-room">
 
             <section className="w-full flex items-center justify-center p-4">
                 {room.playerLeft && room.playerRight &&
@@ -141,6 +146,10 @@ export default function Room() {
                     <Alert type="error" message={message}/>
                 </div>
             }
+
+
+            { modals.gameExitConfirm.status &&  <ModalConfirmGameExit/>  }
+            { modals.gameExitWarning.status &&  <ModalWarningGameExit/> }
         </div>
     );
 }

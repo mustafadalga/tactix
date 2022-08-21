@@ -1,7 +1,38 @@
 import IconExclamationCircle from "@/icons/IconExclamationCircle";
-import IconCloseCircle from "@/icons/IconCloseCircle";
+import {
+    changeModalVisibility,
+    removeLocalStorageKey,
+    removeSelectedStones,
+    setGameExitStatus,
+    setRemovedStones,
+    setRoomInformation
+} from "@/store/tactix";
+import { useDispatch } from "react-redux";
+import { useNavigate } from "react-router-dom";
 
 export default function ModalWarningGameExit() {
+    const dispatch = useDispatch();
+    const navigate = useNavigate();
+
+    const handleGameExitButton = () => {
+        dispatch(setGameExitStatus(false));
+        dispatch(setRoomInformation({}));
+        dispatch(setRemovedStones([]));
+        dispatch(removeSelectedStones());
+        dispatch(removeLocalStorageKey('gameOwner'));
+        dispatch(changeModalVisibility({
+            modal: "gameExitConfirm",
+            status: false,
+            data: {}
+        }));
+        dispatch(changeModalVisibility({
+            modal: "gameExitWarning",
+            status: false,
+            data: {}
+        }));
+        return navigate("/");
+    }
+
     return (
         <div
             className="overflow-y-auto overflow-x-hidden fixed top-0 right-0 left-0 z-50 md:inset-0 h-modal md:h-full justify-center items-center flex bg-black/[.75]">
@@ -16,6 +47,7 @@ export default function ModalWarningGameExit() {
                         </h3>
 
                         <button
+                            onClick={()=>handleGameExitButton()}
                             className="text-dodger-blue border-2 border-dodger-blue hover:text-white  hover:bg-dodger-blue focus:outline-none font-medium rounded-lg text-sm inline-flex items-center px-5 py-2.5 text-center mr-2">
                             <span>Exit Game</span>
                         </button>

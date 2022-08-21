@@ -1,6 +1,7 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit'
 import IStoneInterface from "@/types/IStoneInterface";
 import TactixState from "@/types/ITactixState";
+import IModalVisibility from "@/types/IModalVisibility";
 
 
 const localStorageName = "tactix";
@@ -8,7 +9,18 @@ const initialState: TactixState = {
     room: {},
     removedStones: [],
     selectedStones: [],
-    localStorage: JSON.parse(localStorage.getItem(localStorageName) || '{}')
+    localStorage: JSON.parse(localStorage.getItem(localStorageName) || '{}'),
+    gameExit: false,
+    modals: {
+        gameExitConfirm: {
+            status: false,
+            data: {}
+        },
+        gameExitWarning: {
+            status: false,
+            data: {}
+        },
+    }
 }
 
 
@@ -43,6 +55,15 @@ export const tactixSlice = createSlice({
         setSelectedStone: (state, action: PayloadAction<IStoneInterface>) => {
             state.selectedStones.push(action.payload);
         },
+        setGameExitStatus: (state, action: PayloadAction<boolean>) => {
+            state.gameExit = action.payload
+        },
+        changeModalVisibility: (state, action: PayloadAction<IModalVisibility>) => {
+            state.modals[action.payload.modal] = {
+                status: action.payload.status,
+                data: action.payload.data
+            }
+        },
         removeSelectedStones: (state) => {
             state.selectedStones = [];
         },
@@ -59,6 +80,8 @@ export const {
     setSelectedStone,
     removeSelectedStones,
     removeLocalStorageKey,
+    setGameExitStatus,
+    changeModalVisibility
 } = tactixSlice.actions
 
 export default tactixSlice.reducer

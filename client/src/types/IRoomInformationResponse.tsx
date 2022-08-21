@@ -4,5 +4,4 @@ export default interface IRoomInformationResponse {
     room: {
         [key: string]: any
     },
-    roomID?: string
 }

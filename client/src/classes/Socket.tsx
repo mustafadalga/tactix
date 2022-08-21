@@ -1,10 +1,17 @@
 import { io } from "socket.io-client"
-import { setRemovedStone, setRemovedStones, setRoomInformation } from "@/store/tactix";
+import {
+    changeModalVisibility,
+    setGameExitStatus,
+    setRemovedStone,
+    setRemovedStones,
+    setRoomInformation
+} from "@/store/tactix";
 import ISocket from "@/types/ISocket";
 import IRoomInformationResponse from "@/types/IRoomInformationResponse";
 import IRemovedStoneResponse from "@/types/IRemovedStoneResponse";
 import IRemovedStonesResponse from "@/types/IRemovedStonesResponse";
 import IStoneInterface from "@/types/IStoneInterface";
+import IExitGameReponse from "@/types/IExitGameReponse";
 
 class Socket {
     private serverURL: string
@@ -46,20 +53,6 @@ class Socket {
         });
     }
 
-
-    createMove(roomID: string, move: IStoneInterface[]) {
-        this.socket.emit("createMove", {
-            roomID: roomID,
-            move: move
-        });
-    }
-
-    startNewGame(roomID: string) {
-        this.socket.emit("startNewGame", {
-            roomID
-        });
-    }
-
     setRemovedStone(dispatch: any, setMessage: any) {
         this.socket.on('lastMove', (response: IRemovedStoneResponse) => {
 
@@ -74,6 +67,58 @@ class Socket {
     setMessage(setMessage: any) {
         this.socket.on('message', (message: string) => {
             setMessage(message)
+        });
+    }
+
+    setGameExitStatus(dispatch: any) {
+        this.socket.on('gameExit', (response: IExitGameReponse) => {
+
+            dispatch(setGameExitStatus(response.status));
+
+            if(response.message){
+                dispatch(changeModalVisibility({
+                    modal: "gameExitConfirm",
+                    status: true,
+                    data: {
+                        message:response.message
+                    }
+                }));
+            }
+        });
+    }
+
+    showGameExitWarning(dispatch: any, username: string) {
+        this.socket.on('showGameExitWarning', (response: IExitGameReponse) => {
+
+            if (username == response.username) return;
+
+            dispatch(changeModalVisibility({
+                modal: "gameExitWarning",
+                status: true,
+                data: {
+                    message: response.message
+                }
+            }));
+        });
+    }
+
+    createMove(roomID: string, move: IStoneInterface[]) {
+        this.socket.emit("createMove", {
+            roomID: roomID,
+            move: move
+        });
+    }
+
+    startNewGame(roomID: string) {
+        this.socket.emit("startNewGame", {
+            roomID
+        });
+    }
+
+    exitGame(roomID: string, username: string) {
+        this.socket.emit("exitGame", {
+            roomID,
+            username
         });
     }
 }

@@ -22,6 +22,7 @@ class Socket {
 
             this.joinRoom(socket);
             this.startNewGame(socket);
+            this.exitGame(socket);
             this.createMove(socket);
             this.disConnect(socket);
         });
@@ -71,9 +72,8 @@ class Socket {
 
 
                 await that.changeMoveOrder(roomID);
-                await that.checkAndHandleGameStatus(socket,roomID);
+                await that.checkAndHandleGameStatus(socket, roomID);
                 that.emitRoomInformation(roomID);
-
 
 
             } catch (error) {
@@ -87,7 +87,7 @@ class Socket {
     }
 
 
-    async startNewGame (socket) {
+    startNewGame (socket) {
         socket.on('startNewGame', async ({ roomID }) => {
             try {
                 const room = await Room.findById(roomID);
@@ -106,10 +106,9 @@ class Socket {
                 await room.save();
                 await Move.deleteMany({ roomID: roomID });
 
-
                 this.emitRoomInformation(roomID);
                 this.emitMoves(roomID);
-                socket.emit('message', 'New game has started!');
+                this.io.to(roomID).emit('message', 'New game has started!');
 
 
             } catch (error) {
@@ -119,6 +118,38 @@ class Socket {
                 });
             }
         })
+    }
+
+    exitGame (socket) {
+        socket.on("exitGame", async ({ roomID, username }) => {
+
+            try {
+                const room = await Room.findByIdAndDelete(roomID);
+
+                if (!room) {
+                    return socket.emit('gameExit', {
+                        status: false,
+                        message: "The room could no be found!.",
+                    });
+                }
+
+                socket.emit('gameExit', {
+                    status: true
+                });
+
+                this.io.to(roomID).emit("showGameExitWarning", {
+                    status: true,
+                    username:username,
+                    message: "Your opponent has finished the game!"
+                });
+
+            } catch (error) {
+                socket.emit('gameExit', {
+                    status: false,
+                    message: "An error occurred during exiting game.Please refresh the page and try again!"
+                });
+            }
+        });
     }
 
     async handleRoomInformation (socketID, roomID, username) {
@@ -136,8 +167,8 @@ class Socket {
             }
 
             // Check username authorization
-            if (room.isGameStarted){
-                if (![room.playerLeft.username,room.playerRight.username].includes(username)){
+            if (room.isGameStarted) {
+                if (![ room.playerLeft.username, room.playerRight.username ].includes(username)) {
                     return this.io.to(roomID).emit('roomInformation', {
                         status: false,
                         message: "You are not authorized to enter this game!"
@@ -174,7 +205,7 @@ class Socket {
                 status: false,
                 message: "An error occurred during updating room information.Please refresh the page and try again."
             });
-        }finally {
+        } finally {
             return status;
         }
     }
@@ -235,7 +266,7 @@ class Socket {
         room.save();
     }
 
-    async checkAndHandleGameStatus(socket,roomID){
+    async checkAndHandleGameStatus (socket, roomID) {
         try {
             const moves = await Move.find({ roomID: roomID });
             const room = await Room.findById(roomID);
@@ -248,7 +279,7 @@ class Socket {
 
                 if (room.winnerPlayer == room.playerLeft.username) {
                     room.playerLeft.score += 1;
-                }else if (room.winnerPlayer == room.playerRight.username){
+                } else if (room.winnerPlayer == room.playerRight.username) {
                     room.playerRight.score += 1;
                 }
 

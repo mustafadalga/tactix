@@ -8,5 +8,14 @@ export default interface TactixState {
     selectedStones: IStoneInterface[],
     localStorage: {
         [key: string]: any
+    },
+    gameExit: boolean,
+    modals: {
+        [key: string]: {
+            status: boolean,
+            data: {
+                [key: string]: any
+            }
+        }
     }
 }
