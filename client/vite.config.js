@@ -15,7 +15,9 @@ export default ({ mode }) => {
             },
         },
         server: {
+            strictPort: true,
             port: 3000,
+            host: "::", //'0.0.0.0',
             proxy: {
                 "/api": {
                     target: process.env.VITE__REACT_APP_SERVER_URL,
