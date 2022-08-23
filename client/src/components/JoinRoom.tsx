@@ -21,7 +21,8 @@ export default function JoinRoom() {
     const localStorage = useSelector((state: RootState) => state.tactix.localStorage);
     const username = localStorage.username;
     const gameOwner = localStorage.gameOwner;
-    const roomID = room._id;
+    const roomID = room._id || "";
+
     const [ message, setMessage ] = useState("");
 
 
