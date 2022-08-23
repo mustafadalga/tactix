@@ -54,21 +54,21 @@ export default function CreateRoom() {
 
     return (
         <div className="grid gap-8 bg-white p-6 pb-10">
-            <h2 className="text-lg text-center">
+            <h2 className="text-lg md:text-xl xl:text-2xl	2xl:text-3xl text-center text-dodger-blue">
                 Create your room and join the room
             </h2>
 
 
             <div className="grid grid-cols-4 gap-3">
-                <span className="col-span-1 text-sm text-gray-600">Game Owner</span>
+                <span className="col-span-1 form-label">Game Owner</span>
                 <input type="text"
-                       className="col-span-3 border-b-2 border-gray-300 focus:border-purple-500  border-solid focus:outline-none bg-transparent"
+                       className="col-span-3 form-input"
                        value={username}
                        onChange={event => handleUsername(event)}/>
             </div>
 
             <div className="grid place-items-center">
-                <button className="bg-purple-700 text-white py-2.5 px-4 rounded-md shadow-md"
+                <button className="btn-secondary"
                         onClick={() => createRoom()}>
                     Create Game
                 </button>
@@ -80,10 +80,10 @@ export default function CreateRoom() {
                     <div className="grid grid-cols-12 gap-4">
 
                         <div className="col-span-2">
-                            <span>Room ID :</span>
+                            <span className="form-label">Room ID :</span>
                         </div>
 
-                        <div className="col-span-10 flex items-center gap-4">
+                        <div className="col-span-10 flex items-center gap-4 text-xs	md:text-sm xl:text-base">
                             <span>{roomID}</span>
                             <span onClick={() => copy(roomID)}>
                                 <IconClipBoard/>
@@ -91,11 +91,11 @@ export default function CreateRoom() {
                         </div>
 
                         <div className="col-span-2">
-                            <span>Room URL :</span>
+                            <span className="form-label whitespace-nowrap">Room URL :</span>
                         </div>
 
-                        <div className="col-span-10 flex items-center gap-4">
-                            <Link to={joinURL} className="text-blue-500">{fullJoinURL}</Link>
+                        <div className="col-span-10 flex items-center gap-4 text-xs	md:text-sm xl:text-base">
+                            <Link to={joinURL} className="w-10/12 text-blue-500 break-words">{fullJoinURL}</Link>
                             <span onClick={() => copy(fullJoinURL)}>
                                 <IconClipBoard/>
                             </span>
@@ -107,7 +107,7 @@ export default function CreateRoom() {
 
             <div className="w-full bg-white grid place-items-center gap-3">
                 <span className="text-base">OR</span>
-                <Link to="/join" className="text-gray-400 underline text-sm"> Join a Game </Link>
+                <Link to="/join" className="text-gray-400 underline text-xs md:text-sm"> Join a Game </Link>
             </div>
 
             {message.length > 0 &&

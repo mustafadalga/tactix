@@ -20,8 +20,8 @@ const Home = () => {
 
 
     return (
-        <div className="w-full h-full px-4 pt-12 bg-indigo-900">
-            <div className="max-w-2xl mx-auto rounded-lg shadow-lg">
+        <div className="w-full h-full px-4 pt-12">
+            <div className="max-w-2xl mx-auto rounded-lg border-2 border-dodger-blue shadow-[0_0px_20px_0px_rgba(0,0,0,0.3)] shadow-dodger-blue">
                 <CreateRoom/>
 
                 {message.length > 0 &&

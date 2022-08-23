@@ -70,7 +70,7 @@ export default function Room() {
         if (room.moveOrder) {
             if (room.moveOrder == room.playerLeft.username) {
                 return updatePlayerClasses({
-                    playerLeft: "shadow-[0_0px_24px_0px_rgba(0,0,0,0.3)] shadow-white border-2 border-white border-l-0",
+                    playerLeft: "shadow-[0_0px_24px_0px_rgba(0,0,0,0.3)] shadow-white border-2 border-white border-l-0 !h-4/5",
                     playerRight: "",
                 });
             }
@@ -78,7 +78,7 @@ export default function Room() {
             if (room.moveOrder == room.playerRight.username) {
                 return updatePlayerClasses({
                     playerLeft: "",
-                    playerRight: "shadow-[0_0px_24px_0px_rgba(0,0,0,0.3)] shadow-white border-2 border-white border-r-0"
+                    playerRight: "shadow-[0_0px_24px_0px_rgba(0,0,0,0.3)] shadow-white border-2 border-white border-r-0 !h-4/5"
                 });
             }
         }
@@ -110,7 +110,7 @@ export default function Room() {
 
     return (
         <div
-            className="relative w-full h-full grid grid-rows-[15%_85%] bg-indigo-9000 bg-no-repeat	bg-cover bg-room">
+            className="w-full h-full min-h-screen grid grid-rows-[1.5fr_8.5fr]">
 
             <section className="w-full flex items-center justify-center p-4">
                 {room.playerLeft && room.playerRight &&

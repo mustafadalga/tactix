@@ -1,3 +1,21 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+@layer components {
+    .btn-primary {
+        @apply flex items-center justify-center gap-4 bg-white text-dodger-blue py-1.5 md:py-2 px-3 lg:px-4 xl:px-5 2xl:px-6 w-40 xs:w-auto text-xs md:text-sm lg:text-base rounded-md whitespace-nowrap border-dodger-blue border-[1.5px] hover:bg-dodger-blue hover:text-white transition;
+    }
+
+    .btn-secondary {
+        @apply flex items-center justify-center gap-4 bg-dodger-blue text-white py-1.5 md:py-2 px-3 lg:px-4 xl:px-5 2xl:px-6 w-40 xs:w-auto text-xs md:text-sm lg:text-base rounded-md whitespace-nowrap border-dodger-blue border-[1.5px] hover:bg-white hover:text-dodger-blue transition;
+    }
+
+    .form-input {
+        @apply border-b-2 border-gray-300 focus:border-dodger-blue  border-solid focus:outline-none bg-transparent text-xs md:text-sm xl:text-base;
+    }
+
+    .form-label {
+        @apply text-xs md:text-sm xl:text-base text-gray-600;
+    }
+}

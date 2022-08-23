@@ -29,10 +29,9 @@ export default function Join() {
     }, []);
 
     return (
-        <div className="w-full h-full px-4 pt-12 bg-indigo-900">
-            <div className="max-w-2xl mx-auto grid bg-white rounded-lg shadow-lg">
+        <div className="w-full h-full px-4 pt-12 ">
+            <div className="max-w-2xl mx-auto grid bg-white border-2 border-dodger-blue shadow-[0_0px_20px_0px_rgba(0,0,0,0.3)] shadow-dodger-blue">
                 <JoinRoom/>
-
 
                 {message.length > 0 &&
                     <div className="w-full bg-white flex items-center py-4">

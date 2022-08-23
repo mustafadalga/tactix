@@ -6,7 +6,7 @@ import Join from "./pages/Join";
 function App() {
 
     return (
-        <div className="App w-screen h-screen">
+        <div className="App w-screen h-full min-h-screen max-w-[1680px] mx-auto bg-app bg-no-repeat bg-cover">
             <Routes>
                 <Route path="/" element={<Home/>}/>
                 <Route path="/room/">

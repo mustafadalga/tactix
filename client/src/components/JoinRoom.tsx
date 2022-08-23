@@ -67,29 +67,29 @@ export default function JoinRoom() {
 
 
     return (
-        <div className="grid gap-8 bg-white p-6 p-6 ">
+        <div className="grid gap-8 bg-white p-6 p-6">
             <h2 className="text-lg text-center">
                 Join your room to begin the game
             </h2>
 
             <div className="grid grid-cols-4 gap-3">
-                <span className="col-span-1 text-sm text-gray-600">Username</span>
+                <span className="col-span-1 form-label">Username</span>
                 <input type="text"
-                       className="col-span-3 border-b-2 border-gray-300 focus:border-purple-500  border-solid focus:outline-none bg-transparent"
+                       className="col-span-3 form-input"
                        value={username}
                        onChange={event => handleUsername(event)}/>
             </div>
 
             <div className="grid grid-cols-4 gap-3">
-                <span className="col-span-1 text-sm text-gray-600">Room ID</span>
+                <span className="col-span-1 form-label">Room ID</span>
                 <input type="text"
-                       className="col-span-3 border-b-2 border-gray-300 focus:border-purple-500  border-solid focus:outline-none bg-transparent"
+                       className="col-span-3 form-input"
                        onChange={event => handleRoomID(event)}
                        value={roomID}/>
             </div>
 
             <div className="grid place-items-center">
-                <button className="bg-purple-700 text-white py-2.5 px-4 rounded-md shadow-md m-4"
+                <button className="btn-secondary"
                    onClick={()=>handleJoinButton()}>
                     Join Game
                 </button>
@@ -97,7 +97,7 @@ export default function JoinRoom() {
 
             <div className="w-full bg-white grid place-items-center gap-3">
                 <span className="text-base">OR</span>
-                <Link to="/" className="text-gray-400 underline text-sm"> Create a Game </Link>
+                <Link to="/" className="text-gray-400 underline text-xs md:text-sm"> Create a Game </Link>
             </div>
 
 

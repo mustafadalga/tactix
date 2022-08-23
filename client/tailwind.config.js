@@ -9,7 +9,7 @@ module.exports = {
         extend: {
             colors: {
                 "dodger-blue": "rgba(16,137,255,.9)",
-                "light-red": "hsla(0, 100%, 50%, 0.6)"
+                "light-red": "hsla(0, 100%, 50%, 0.6)",
             },
             keyframes: {
                 'player': {
@@ -72,7 +72,7 @@ module.exports = {
                 'flip': 'flip 1.5s',
             },
             backgroundImage: {
-                'room': "url('@/assets/images/bg-room.png')",
+                'app': "url('@/assets/images/bg.png')",
             }
         },
         screens: {

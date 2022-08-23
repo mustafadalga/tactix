@@ -10,10 +10,10 @@ export default function Stone({stone, selectedStone, appendSelectedStone}: Props
 
 
     if (selectedStone) {
-        bigCircleClasses += " bg-transparent"
+        bigCircleClasses += " bg-transparent border-4"
         smallCircleClasses += " bg-transparent"
     } else {
-        bigCircleClasses += " bg-light-red"
+        bigCircleClasses += " bg-light-red  hover:border-4"
         smallCircleClasses += " bg-gradient-to-r from-red-500 to-red-900";
     }
 
