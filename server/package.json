@@ -8,11 +8,11 @@
     "start": "node src/index.js"
   },
   "author": "Mustafa Dalga",
-  "license": "ISC",
+  "license": "GPL-3.0",
   "keywords": [
-    "tactix",
-    "mind",
-    "game"
+    "Tactix",
+    "Intelligence",
+    "Game"
   ],
   "dependencies": {
     "cors": "^2.8.5",

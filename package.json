@@ -12,10 +12,8 @@
     "Game"
   ],
   "author": "Mustafa Dalga",
-  "license": "ISC",
-  "dependencies": {
-    "express": "^4.18.1"
-  },
+  "license": "GPL-3.0",
+  "dependencies": {},
   "engines": {
     "node": "14.19.3",
     "npm": "6.14.17"
