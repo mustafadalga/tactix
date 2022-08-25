@@ -35,6 +35,10 @@ export default function SquardBoardButtonGroup({setMessage}: Props) {
     }
 
     const handleNewGameButton = () => {
+        if (!room.isGameStarted) {
+            return setMessage("The game has not started yet!");
+        }
+
         Socket.startNewGame(roomID);
 
         // Destroy  selected stones when new game start
