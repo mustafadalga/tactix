@@ -35,7 +35,7 @@ export default function SquardBoardButtonGroup({setMessage}: Props) {
     }
 
     const handleNewGameButton = () => {
-        if (!room.isGameStarted) {
+        if (!room.isGameStarted && !room.isGameFinished) {
             return setMessage("The game has not started yet!");
         }
 
