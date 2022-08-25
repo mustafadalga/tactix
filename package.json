@@ -1,15 +1,15 @@
 {
   "name": "tactix",
   "version": "1.0.0",
-  "description": "Tactix Mind Game",
+  "description": "Tactix Intelligence Game",
   "scripts": {
     "start": "node server/src/index.js",
-    "build": "cd client && npm install typescript -g && npm install && npm run build"
+    "build": "cd client && npm install && npm run build"
   },
   "keywords": [
-    "tactix",
-    "mind",
-    "game"
+    "Tactix",
+    "Intelligence",
+    "Game"
   ],
   "author": "Mustafa Dalga",
   "license": "ISC",
