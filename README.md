@@ -55,7 +55,7 @@
 * [Demo](https://tactixgame.herokuapp.com/)
 
 ## Used Technologies
-* React.js
+* React.js / Typescript
 * Express.js (Node.js)
 * MongoDB
 * Node JS
