@@ -52,7 +52,8 @@
 
 
 ## Demo 
-* [Demo](https://tactixgame.herokuapp.com/)
+* [Project](https://tactixgame.herokuapp.com/)
+* [Demo Video](https://youtu.be/CUJQp8WKpYY)
 
 ## Used Technologies
 * React.js / Typescript
