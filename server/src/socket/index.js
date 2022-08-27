@@ -196,6 +196,7 @@ class Socket {
             if (!room.isGameStarted && room.playerLeft.username && room.playerRight.username) {
                 room.isGameStarted = true;
                 room.moveOrder = room[this.getRandomUser()].username;
+                this.io.to(roomID).emit('message', 'Game has started!');
             }
 
             await room.save();
