@@ -55,6 +55,9 @@
 * [Project](https://tactixgame.herokuapp.com/)
 * [Demo Video](https://youtu.be/CUJQp8WKpYY)
 
+https://user-images.githubusercontent.com/25087769/187072175-d5ffdd51-5180-4fc6-82a2-740883e1ad59.mp4
+
+
 ## Used Technologies
 * React.js / Typescript
 * Express.js (Node.js)
