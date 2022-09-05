@@ -1,5 +1,5 @@
 import { useNavigate, useParams } from "react-router-dom";
-import { useEffect, useState } from "react";
+import { useEffect, useState, lazy, Suspense } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import SquareBoard from "@/components/SquareBoard";
 import Gamer from "@/components/Gamer";
@@ -9,8 +9,9 @@ import { RootState } from "@/store";
 import Socket from "@/classes/Socket";
 import SquardBoardButtonGroup from "@/components/SquardBoardButtonGroup";
 import { removeLocalStorageKey } from "@/store/tactix";
-import ModalWarningGameExit from "@/components/ModalWarningGameExit";
-import ModalConfirmGameExit from "@/components/ModalConfirmGameExit";
+const ModalWarningGameExit = lazy(() => import("@/components/ModalWarningGameExit"));
+const ModalConfirmGameExit = lazy(() => import("@/components/ModalConfirmGameExit"));
+
 
 
 export default function Room() {
@@ -148,8 +149,11 @@ export default function Room() {
             }
 
 
-            { modals.gameExitConfirm.status &&  <ModalConfirmGameExit/>  }
-            { modals.gameExitWarning.status &&  <ModalWarningGameExit/> }
+            <Suspense fallback={<div>loading</div>}>
+                {modals.gameExitConfirm.status && <ModalConfirmGameExit/>}
+                {modals.gameExitWarning.status && <ModalWarningGameExit/>}
+            </Suspense>
+
         </div>
     );
 }
