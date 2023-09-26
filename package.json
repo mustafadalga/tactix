@@ -3,11 +3,11 @@
   "version": "1.0.0",
   "description": "Tactix Intelligence Game",
   "scripts": {
-    "client-install": "cd client && npm install",
+    "client-install": "cd client && npm install && npm run build",
     "server-install": "cd server && npm install",
     "install-all": "npm run client-install && npm run server-install",
-    "build": "npm run client-install && cd client && npm run build",
-    "start": "cd server && npm install && npm start"
+    "build": "npm run install-all",
+    "start": "cd server && npm start"
   },
   "keywords": [
     "Tactix",
