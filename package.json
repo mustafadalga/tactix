@@ -7,7 +7,7 @@
     "server-install": "cd server && npm install",
     "install-all": "npm run client-install && npm run server-install",
     "build": "cd client && npm install && npm run build",
-    "start": "npm run build && cd server && npm start"
+    "start": "cd server && npm install && npm start"
   },
   "keywords": [
     "Tactix",
