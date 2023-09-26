@@ -6,7 +6,7 @@
     "client-install": "cd client && npm install",
     "server-install": "cd server && npm install",
     "install-all": "npm run client-install && npm run server-install",
-    "build": "cd client && npm run build",
+    "build": "cd client && npm install && npm run build",
     "start": "npm run build && cd server && npm start"
   },
   "keywords": [
